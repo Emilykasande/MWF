@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  .container
+    .card(style="margin-top: 20px")
+      h2 Sales Report
+      table#salesTable(action="/addsale", method="post")
+        thead
+          tr
+            th Customer
+            th Product
+            th Quantity
+            th Unit Price
+            th Total Price
+            th Transport
+            th Agent
+            th Payment
+            th Date
+            th Actions
+        tbody
+          if sales && sales.length
+            each sale in sales
+              tr
+                td= sale.customername
+                td= sale.product
+                td= sale.quantity
+                td= sale.price
+                td= (sale.quantity * sale.price).toFixed(2)
+                td= sale.transport || "N/A"
+                td= (sale.salesAgent ? sale.salesAgent.fullname : "Unknown")
+                td= sale.paymentMethod
+                td= sale.formattedDate
+                td
+                  if user && user.position === "manager"
+                    form(method="get", action=`/editsale/${sale._id}`, style="display:inline")
+                      button.btn.btn-primary(type="submit") Edit
+                    form(method="post", action="/sales/delete", style="display:inline; margin-left:5px")
+                      input(type="hidden", name="id", value=sale._id)
+                      button.btn.btn-danger(type="submit") Delete
+          else
+            tr
+              td(colspan="10") No sales recorded yet.

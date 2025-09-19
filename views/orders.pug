@@ -1,0 +1,43 @@
+//- views/newOrder.pug
+extends layout
+
+block content
+  .container
+    h2 Create New Order
+
+    form(method="POST", action="/orders")
+      .form-group
+        label(for="productSku") Product
+        if products && products.length
+          select#productSku.form-control(name="productSku", required)
+            option(value="") -- Select a Product --
+            each product in products
+              option(value=product.sku)= product.name + " (UGX " + product.price + ")"
+        else
+          p.text-danger No products available. Please add products first.
+
+      .form-group
+        label(for="productQty") Quantity
+        input#productQty.form-control(type="number", name="productQty", min="1", value="1", required)
+
+      .form-group
+        label(for="customerName") Customer
+        if customers && customers.length
+          select#customerName.form-control(name="customerName", required)
+            option(value="") -- Select a Customer --
+            each customer in customers
+              option(value=customer.name)= customer.name
+        else
+          p.text-danger No customers available. Please add customers first.
+
+      .form-group
+        label(for="status") Status
+        select#status.form-control(name="status", required)
+          option(value="Pending") Pending
+          option(value="Processing") Processing
+          option(value="Shipped") Shipped
+          option(value="Completed") Completed
+          option(value="Cancelled") Cancelled
+
+      button.btn.btn-primary(type="submit") Save Order
+      a.btn.btn-secondary(href="/orders") Cancel

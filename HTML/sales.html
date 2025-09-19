@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Layout Example</title>
+    <link rel="stylesheet" href="/CSS/sales.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="brand">
+            <a href="index.html">
+                <img src="/Images/mayondo logo.png" alt="Company Logo">
+            </a>
+            <h2>Mayondo Wood And Furniture</h2>
+        </div>
+
+        <nav class="nav-links">
+            <a href="crm.html">CRM</a>
+            <a href="analytics.html">Analytics</a>
+            <div class="dropdown">
+                <a href="accounting.html">Accounting ▼</a>
+                <div class="dropdown-content">
+                    <a href="reports.html">Reports</a>
+                    <a href="expenses.html">Expenses</a>
+                    <a href="cashflow.html">Cash Flow</a>
+                </div>
+            </div>
+
+            <a href="store.html">E-commerce</a>
+
+
+            <div class="search-box">
+                <input type="text" placeholder="Search...">
+                <button>Go</button>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <h2>Add New Sale</h2>
+                <form id="salesForm">
+                    <label>Customer Name</label>
+                    <input type="text" id="customer" required />
+
+                    <label>Product</label>
+                    <input type="text" id="product" required />
+
+                    <label>Quantity</label>
+                    <input type="number" id="quantity" required />
+
+                    <label>Transport Required?</label>
+                    <select id="transport">
+                        <option value="no">No</option>
+                        <option value="yes">Yes (+5%)</option>
+                    </select>
+
+                    <label>Sales Agent</label>
+                    <input type="text" id="agent" required />
+
+                    <label>Payment Type</label>
+                    <select id="payment">
+                        <option value="cash">Cash</option>
+                        <option value="mobile">Mobile Money</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+
+                    <button type="submit">Record Sale</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Sale Receipt</h2>
+                <div id="receiptDetails" class="receipt-box">
+                    <p>Fill in the form to preview receipt...</p>
+                </div>
+                <button onclick="window.print()">Print Receipt</button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px">
+            <h2>Sales Report</h2>
+            <table id="salesTable">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Transport</th>
+                        <th>Agent</th>
+                        <th>Payment</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <h3>Connect With Us</h3>
+        <div class="footer-links">
+            <a href="mailto:info@yourcompany.com">📧 Email</a>
+            <a href="tel:+1234567890">📞 Phone</a>
+            <a href="https://wa.me/1234567890" target="_blank">💬 WhatsApp</a>
+            <a href="https://facebook.com/yourpage" target="_blank">📘 Facebook</a>
+            <a href="https://instagram.com/yourpage" target="_blank">📸 Instagram</a>
+            <a href="https://twitter.com/yourpage" target="_blank">🐦 Twitter</a>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Your Company Name. All rights reserved.
+        </div>
+    </footer>
+    <script src="/Javascript/sales.js"></script>
+</body>
+
+</html>

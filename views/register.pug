@@ -1,0 +1,29 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Staff Registration - Mayondo Furniture & Wood
+link(rel="stylesheet", href="/CSS/register.css")
+.overlay
+  form#staffForm.registration-form(action="/register", method="post")
+    h2 Staff Registration
+    .form-group
+      label(for="fullname") Full Name
+      input#fullname(type="text", name="fullname", required)
+    .form-group
+      label(for="email") Email
+      input#email(type="email", name="email", required)
+    .form-group
+      label(for="phone") Phone Number
+      input#phone(type="tel", name="phone", pattern="[0-9]{10,15}", placeholder="Digits only", required)
+    .form-group
+      label(for="position") Position/Role
+      input#position(type="text", name="position", required)
+    .form-group
+      label(for="password") Password
+      input#password(type="password", name="password", required)
+      button.toggle-password(type="button", onclick="togglePassword(\'password\')") 👁️
+    .form-group
+      label(for="confirm_password") Confirm Password
+      input#confirm_password(type="password", name="confirm_password", required)
+      button.toggle-password(type="button", onclick="togglePassword(\'confirm_password\')") 👁️
+    button(type="submit") Register
+//- script(src="/Javascript/register.js")

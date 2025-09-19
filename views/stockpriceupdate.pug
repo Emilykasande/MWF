@@ -1,0 +1,62 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Price & Stock Update
+link(rel="stylesheet", href="/CSS/priceupdate.css")
+
+header.navbar
+  .brand
+    a(href="index.html")
+      img(src="/Images/mayondo logo.png", alt="Company Logo")
+    h2 Mayondo Wood And Furniture
+  nav.nav-links
+    a(href="crm.html") CRM
+    a(href="analytics.html") Analytics
+    .dropdown
+      a(href="accounting.html") Accounting ▼
+      .dropdown-content
+        a(href="reports.html") Reports
+        a(href="expenses.html") Expenses
+        a(href="cashflow.html") Cash Flow
+    a(href="store.html") E-commerce
+    .search-box
+      input(type="text", placeholder="Search...")
+      button Go
+
+.container
+  h2 Update Product Price & Stock
+  form#priceStockForm
+    label(for="product") Select Product
+    input#product(type="text", placeholder="Product name", required)
+
+    label(for="newPrice") New Sale Price
+    input#newPrice(type="number", required, min="0")
+
+    label(for="newStock") New Stock Quantity
+    input#newStock(type="number", required, min="0")
+
+    button(type="submit") Update Product
+
+  h2 Current Products, Prices & Stock
+  table#productTable
+    thead
+      tr
+        th Product
+        th Type
+        th Current Price
+        th Current Stock
+    tbody
+
+//  Footer 
+footer
+  h3 Connect With Us
+  .footer-links
+    a(href="mailto:info@yourcompany.com") 📧 Email
+    a(href="tel:+1234567890") 📞 Phone
+    a(href="https://wa.me/1234567890", target="_blank") 💬 WhatsApp
+    a(href="https://facebook.com/yourpage", target="_blank") 📘 Facebook
+    a(href="https://instagram.com/yourpage", target="_blank") 📸 Instagram
+    a(href="https://twitter.com/yourpage", target="_blank") 🐦 Twitter
+  .footer-bottom.
+    © 2025 Your Company Name. All rights reserved.
+
+script(src="/Javascript/priceupdate.js")

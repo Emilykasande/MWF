@@ -1,0 +1,61 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Our Online Shop
+    link(rel="stylesheet", href="/CSS/ecommerce.css")
+  body
+    .container
+      h1 Our Online Shop
+
+      .slideshow-container
+        .slide.active
+          img(src="/Images/sofa set.jpeg", alt="Promo 1")
+          .promo-text
+            h2 🔥 Sofa Sale – 20% Off
+            p Limited time offer on all sofa sets
+        .slide
+          img(src="/Images/bed room.jpeg", alt="Promo 2")
+          .promo-text
+            h2 🛏 New Beds 2025
+            p Modern designs for your comfort
+        .slide
+          img(src="/Images/dinning.jpeg", alt="Promo 3")
+          .promo-text
+            h2 🚚 Free Delivery
+            p On all orders above $200
+        .slideshow-controls
+          button.btn-slide#prevBtn(type="button") ‹
+          button.btn-slide#nextBtn(type="button") ›
+
+      .wrap
+        main
+          #productGrid
+            if products && products.length
+              each product in products
+                .card
+                  .img-wrap
+                    img(src=product.img, alt=product.name, onerror="this.src='/Images/no-image.png'")
+                  .meta
+                    h4.title= product.name
+                    .price UGX #{product.price}
+                  .actions
+                    button.small(type="button", onclick=`alert('${product.name} — UGX ${product.price}')`) View
+                    button.add-to-cart(type="button", data-id=product._id, data-name=product.name, data-price=product.price) Add to Cart
+            else
+              p No products to show.
+
+        aside.cart(aria-label="Shopping cart")
+          h3 Your cart
+          .form-group
+            label(for="customerName") Your name
+            input#customerName(type="text", placeholder="Enter your name" required)
+          ul#cartList
+          .total
+            span Total:
+            span#total UGX 0
+          div(style="margin-top:10px")
+            button#checkoutBtn(type="button") Checkout
+
+    script(src="/Javascript/ecommerce.js")

@@ -1,0 +1,71 @@
+extends layout
+
+block content
+  h2 🪵 Raw Materials (Wood Stock)
+  .container
+    //- Unified form: works for Add or Update
+    form(action=editItem ? `/updatestock/${editItem._id}` : "/stock" method="post")
+      input(type="text", name="product", placeholder="Wood Type", required, value=editItem ? editItem.product : "")
+      input(type="number", name="quantity", placeholder="Quantity", required, value=editItem ? editItem.quantity : "")
+      input(type="number", name="price", placeholder="Price per Unit", required, step="0.01", value=editItem ? editItem.price : "")
+      input(type="hidden", name="category", value="wood")
+      button(type="submit") #{editItem ? "Update Wood" : "Add Wood"}
+
+    table
+      thead
+        tr
+          th Wood Type
+          th Quantity
+          th Price
+          th Status
+          th Update
+          th Delete
+      tbody
+        each item in items
+          if item.category == "wood"
+            tr
+              td= item.product
+              td= item.quantity
+              td ugx#{item.price}
+              td= item.status
+              td
+                 form(method="get", action=`/updatestock/${item._id}`)
+                    button.btn.btn-info(type="submit") Update
+              td
+                form(method="post", action="/delete")
+                  input(type="hidden", name="id", value=item._id)
+                  button.btn.btn-danger(type="submit") Delete
+
+  h2 🛋️ Finished Furniture
+  .container
+    form(action=editItem ? `/updatestock/${editItem._id}` : "/stock" method="post")
+      input(type="text", name="product", placeholder="Furniture Name", required, value=editItem ? editItem.product : "")
+      input(type="number", name="quantity", placeholder="Quantity", required, value=editItem ? editItem.quantity : "")
+      input(type="number", name="price", placeholder="Sale Price", required, step="0.01", value=editItem ? editItem.price : "")
+      input(type="hidden", name="category", value="furniture")
+      button(type="submit") #{editItem ? "Update Furniture" : "Add Furniture"}
+
+    table
+        thead
+          tr
+            th Product
+            th Quantity
+            th Price
+            th Status
+            th Update
+            th Delete
+        tbody
+          each item in items
+            if item.category == "furniture"
+              tr
+                td= item.product
+                td= item.quantity
+                td ugx#{item.price}
+                td= item.status
+                td
+                   form(method="get", action=`/updatestock/${item._id}`)
+                    button.btn.btn-info(type="submit") Update
+                td
+                  form(method="post", action="/delete")
+                    input(type="hidden", name="id", value=item._id)
+                    button.btn.btn-danger(type="submit") Delete

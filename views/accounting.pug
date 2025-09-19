@@ -1,0 +1,84 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+    title Accounting Dashboard
+    script(src="https://cdn.jsdelivr.net/npm/chart.js")
+    link(rel="stylesheet", href="/CSS/accounting.css")
+  body
+    header.navbar
+      .brand
+        a(href="/")
+          img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+
+    h1 Accounting Dashboard
+
+    form(action="/accounting" method="post")
+      .form-section
+        h2 Enter Financial Data
+        label Sales (ugx): 
+          input(type="number", name="sales", required, value=data.sales || "")
+        label COGS (ugx): 
+          input(type="number", name="cogs", required, value=data.cogs || "")
+        label Expenses (ugx): 
+          input(type="number", name="expenses", required, value=data.expenses || "")
+        label Salaries (ugx): 
+          input(type="number", name="salaries", required, value=data.salaries || "")
+        label Rent (ugx): 
+          input(type="number", name="rent", required, value=data.rent || "")
+        label Utilities (ugx): 
+          input(type="number", name="utilities", required, value=data.utilities || "")
+        label Marketing (ugx): 
+          input(type="number", name="marketing", required, value=data.marketing || "")
+        label Cash Flow (comma separated): 
+          input(type="text", name="cashFlow", placeholder="5000,6000,7000", value=data.cashFlow ? data.cashFlow.join(",") : "")
+        label Receivables (ugx): 
+          input(type="number", name="receivables", required, value=data.receivables || "")
+        label Payables (ugx): 
+          input(type="number", name="payables", required, value=data.payables || "")
+        button(type="submit") Update Dashboard
+
+    .grid
+      .card
+        h2 Profit & Loss
+        canvas#plChart
+      .card
+        h2 Expenses Breakdown
+        canvas#expenseChart
+      .card
+        h2 Cash Flow
+        canvas#cashChart
+      .card
+        h2 Receivables vs Payables
+        canvas#arApChart
+
+              // Inject server data into JS variables
+        script.
+          const sales = !{data.sales || 0};
+          const cogs = !{data.cogs || 0};
+          const expenses = !{data.expenses || 0};
+          const salaries = !{data.salaries || 0};
+          const rent = !{data.rent || 0};
+          const utilities = !{data.utilities || 0};
+          const marketing = !{data.marketing || 0};
+          const cashFlow = !{JSON.stringify(data.cashFlow || [])};
+          const receivables = !{data.receivables || 0};
+          const payables = !{data.payables || 0};
+
+        script(src="/Javascript/accounting.js")
+
+    footer
+      h3 Connect With Us
+      .footer-links
+        a(href="mailto:info@yourcompany.com") 📧 Email
+        a(href="tel:+1234567890") 📞 Phone
+        a(href="https://wa.me/1234567890", target="_blank") 💬 WhatsApp
+        a(href="https://facebook.com/yourpage", target="_blank") 📘 Facebook
+        a(href="https://instagram.com/yourpage", target="_blank") 📸 Instagram
+        a(href="https://twitter.com/yourpage", target="_blank") 🐦 Twitter
+      .footer-bottom.
+        © 2025 Your Company Name. All rights reserved.
+
+    

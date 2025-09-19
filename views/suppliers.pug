@@ -1,0 +1,307 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Full Layout Example
+style.
+  
+  body {
+              margin: 0;
+              font-family: Arial, sans-serif;
+          }
+  
+          .navbar {
+              position: sticky;
+              top: 0;
+              z-index: 1000;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              background: #000;
+              padding: 10px 20px;
+          }
+  
+          .navbar img {
+              height: 40px;
+          }
+  
+          .nav-links {
+              display: flex;
+              gap: 20px;
+              align-items: center;
+          }
+  
+          .nav-links a {
+              color: white;
+              text-decoration: none;
+              font-weight: bold;
+              position: relative;
+          }
+  
+          .nav-links a:hover {
+              text-decoration: underline;
+          }
+  
+          .dropdown {
+              position: relative;
+          }
+  
+          .dropdown-content {
+              display: none;
+              position: absolute;
+              top: 100%;
+              left: 0;
+              background: #222;
+              min-width: 160px;
+              border-radius: 5px;
+              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+              z-index: 999;
+          }
+  
+          .dropdown-content a {
+              display: block;
+              padding: 10px;
+              color: white;
+              text-decoration: none;
+          }
+  
+          .dropdown-content a:hover {
+              background: #444;
+          }
+  
+          .dropdown:hover .dropdown-content {
+              display: block;
+          }
+  
+          .search-box {
+              display: flex;
+              align-items: center;
+              background: #fff;
+              border-radius: 5px;
+              padding: 3px 8px;
+          }
+  
+          .search-box input {
+              border: none;
+              outline: none;
+              padding: 5px;
+          }
+  
+          .search-box button {
+              border: none;
+              background: #007bff;
+              color: white;
+              padding: 5px 10px;
+              border-radius: 5px;
+              cursor: pointer;
+          }
+  
+          .search-box button:hover {
+              background: #0056b3;
+          }
+  
+          footer {
+              background: #111;
+              color: #fff;
+              padding: 20px;
+              margin-top: 40px;
+              text-align: center;
+          }
+  
+          .footer-links {
+              margin: 10px 0;
+              display: flex;
+              justify-content: center;
+              gap: 20px;
+              flex-wrap: wrap;
+          }
+  
+          .footer-links a {
+              color: #ddd;
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              gap: 5px;
+          }
+  
+          .footer-links a:hover {
+              color: #fff;
+          }
+  
+          .footer-bottom {
+              margin-top: 10px;
+              font-size: 14px;
+              color: #aaa;
+          }
+  
+          body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              background-color: #f4f4f4;
+          }
+  
+          .container {
+              width: 90%;
+              max-width: 1000px;
+              margin: 2rem auto;
+              background: #fff;
+              padding: 2rem;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+  
+          h2 {
+              margin-bottom: 1rem;
+          }
+  
+          table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 1rem;
+          }
+  
+          table,
+          th,
+          td {
+              border: 1px solid #ddd;
+          }
+  
+          th,
+          td {
+              padding: 0.75rem;
+              text-align: left;
+          }
+  
+          th {
+              background-color: #007bff;
+              color: white;
+          }
+  
+          form {
+              margin-top: 2rem;
+          }
+  
+          .form-group {
+              margin-bottom: 1rem;
+          }
+  
+          label {
+              display: block;
+              margin-bottom: 0.5rem;
+          }
+  
+          input[type="text"],
+          input[type="email"],
+          input[type="tel"] {
+              width: 100%;
+              padding: 0.5rem;
+              border-radius: 5px;
+              border: 1px solid #ccc;
+          }
+  
+          button {
+              background-color: #007bff;
+              color: #fff;
+              padding: 0.5rem 1rem;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              margin-right: 0.5rem;
+          }
+  
+          button:hover {
+              background-color: #0056b3;
+          }
+  
+          .action-btn {
+              padding: 0.25rem 0.5rem;
+              font-size: 0.9rem;
+          }
+  
+          .delete-btn {
+              background-color: #dc3545;
+          }
+  
+          .delete-btn:hover {
+              background-color: #a71d2a;
+          }
+  
+          .edit-btn {
+              background-color: #28a745;
+          }
+  
+          .edit-btn:hover {
+              background-color: #1c7430;
+          }
+  
+          .brand {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              color: white;
+          }
+  
+          .brand h2 {
+              margin: 0;
+              font-size: 20px;
+              color: white;
+          }
+  
+header.navbar
+  .brand
+    a(href="index.html")
+      img(src="/Images/mayondo logo.png", alt="Company Logo")
+    h2 Mayondo Wood And Furniture
+  nav.nav-links
+    a(href="crm.html") CRM
+    a(href="analytics.html") Analytics
+    .dropdown
+      a(href="accounting.html") Accounting ▼
+      .dropdown-content
+        a(href="reports.html") Reports
+        a(href="expenses.html") Expenses
+        a(href="cashflow.html") Cash Flow
+    a(href="store.html") E-commerce
+    .search-box
+      input(type="text", placeholder="Search...")
+      button Go
+.container
+  h2 Suppliers List
+  table#suppliersTable
+    thead
+      tr
+        th #
+        th Name
+        th Email
+        th Phone
+        th Actions
+    tbody.
+      
+      
+  h2#formTitle Add New Supplier
+  form#supplierForm(action='/supplier' method='post')
+    .form-group
+      label(for="supplierName") Supplier Name
+      input#supplierName(type="text", name="supplierName", required)
+    .form-group
+      label(for="supplierEmail") Email
+      input#supplierEmail(type="email", name="supplierEmail", required)
+    .form-group
+      label(for="supplierPhone") Phone
+      input#supplierPhone(type="tel", name="supplierPhone", required)
+    button#submitBtn(type="submit") Add Supplier
+    button#cancelEditBtn(type="button", style="display:none;") Cancel Edit
+//  Footer 
+footer
+  h3 Connect With Us
+  .footer-links
+    a(href="mailto:info@yourcompany.com") 📧 Email
+    a(href="tel:+1234567890") 📞 Phone
+    a(href="https://wa.me/1234567890", target="_blank") 💬 WhatsApp
+    a(href="https://facebook.com/yourpage", target="_blank") 📘 Facebook
+    a(href="https://instagram.com/yourpage", target="_blank") 📸 Instagram
+    a(href="https://twitter.com/yourpage", target="_blank") 🐦 Twitter
+  .footer-bottom.
+    
+    © 2025 Your Company Name. All rights reserved.
+    
+script(src="/Javascript/suppliers.js")

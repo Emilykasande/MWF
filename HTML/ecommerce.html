@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Our online shop</title>
+    <link rel="stylesheet" href="/CSS/ecommerce.css">
+       
+</head>
+
+<body>
+
+    <!-- Slideshow -->
+    <div class="slideshow-container">
+        <div class="slide active">
+            <img src="/Images/sofa set.jpeg" alt="Promo 1">
+            <div class="promo-text">
+                <h2>🔥 Sofa Sale – 20% Off</h2>
+                <p>Limited time offer on all sofa sets</p>
+            </div>
+        </div>
+    
+        <div class="slide">
+            <img src="/Images/bed room.jpeg" alt="Promo 2">
+            <div class="promo-text">
+                <h2>🛏 New Beds 2025</h2>
+                <p>Modern designs for your comfort</p>
+            </div>
+        </div>
+    
+        <div class="slide">
+            <img src="/Images/dinning.jpeg" alt="Promo 3">
+            <div class="promo-text">
+                <h2>🚚 Free Delivery</h2>
+                <p>On all orders above $200</p>
+            </div>
+        </div>
+    
+        <!-- Controls -->
+        <div class="slideshow-controls">
+            <button class="btn-slide btn-prev" id="prevBtn">‹</button>
+            <button class="btn-slide btn-next" id="nextBtn">›</button>
+        </div>
+    </div>
+    <div class="wrap">
+        <main>
+            <div id="productGrid" aria-live="polite"></div>
+        </main>
+
+        <aside class="cart" aria-label="Shopping cart">
+            <h3>Your cart</h3>
+            <ul id="cartList"></ul>
+            <div class="total">
+                <span>Total:</span>
+                <span id="total">0</span>
+            </div>
+            <div style="margin-top:10px">
+                <button onclick="checkout()"
+                    style="width:100%; padding:10px; border-radius:8px; background:var(--accent); color:#fff; border:none; cursor:pointer;">Checkout</button>
+            </div>
+        </aside>
+    </div>
+   <script src="/Javascript/ecommerce.js"></script>
+</body>
+
+</html>
