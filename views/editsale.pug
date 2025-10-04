@@ -1,31 +1,194 @@
-extends layout
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Edit Sale
+    link(rel="stylesheet", href="/CSS/sales.css")
 
-block content
-  .container
-    .card(style="margin-top: 20px")
-      h2 Edit Sale
-      form(action=`/editsale/${sale._id}`, method="post")
-        label Customer Name
-        input(type="text", name="customername", value=sale.customername)
+  body
+    // Navbar
+    header.navbar
+      .brand
+        a(href="/")
+          img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+      nav.nav-links
+        a(href="/saleslist") Back to Sales
+        a(href="/stockreport") Stock
+        if user
+          a.btn-logout(href="/logout") Logout
 
-        label Product
-        input(type="text", name="product", value=sale.product)
+    .container
+      .flex-container(style="display: flex; gap: 20px; flex-wrap: wrap;")
+        // Edit Sale Form
+        .card(style="flex: 1; min-width: 300px;")
+          h2 Edit Sale
+          form#salesForm(action=`/editsale/${sale._id}`, method="post")
+            label(for="customername") Customer Name
+            input#customername(type="text", name="customername", required, value=sale.customername)
 
-        label Quantity
-        input(type="number", name="quantity", value=sale.quantity)
+            label(for="product") Product
+            input#product(type="text", name="product", required, value=sale.product)
 
-        label Unit Price
-        input(type="number", step="0.01", name="price", value=sale.price)
+            label(for="quantity") Quantity
+            input#quantity(type="number", name="quantity", required, value=sale.quantity)
 
-        label Transport Required?
-        select(name="transport")
-          option(value="no", selected=sale.transport==="no") No
-          option(value="yes", selected=sale.transport==="yes") Yes (+5%)
+            label(for="price") Unit Price
+            input#price(type="number", step="0.01", name="price", required, value=sale.price)
 
-        label Payment Type
-        select(name="paymentMethod")
-          option(value="cash", selected=sale.paymentMethod==="cash") Cash
-          option(value="mobile", selected=sale.paymentMethod==="mobile") Mobile Money
-          option(value="bank", selected=sale.paymentMethod==="bank") Bank Transfer
+            label(for="transport") Transport Required?
+            select#transport(name="transport")
+              option(value="no", selected=sale.transport !== "yes") No
+              option(value="yes", selected=sale.transport === "yes") Yes (+5%)
 
-        button(type="submit") Update Sale
+            label(for="paymentMethod") Payment Type
+            select#paymentMethod(name="paymentMethod")
+              option(value="cash", selected=sale.paymentMethod === "cash") Cash
+              option(value="mobile", selected=sale.paymentMethod === "mobile") Mobile Money
+              option(value="bank", selected=sale.paymentMethod === "bank") Bank Transfer
+
+            label(for="date") Date
+            input#date(type="date", name="date", required, value=sale.date ? new Date(sale.date).toISOString().split('T')[0] : '')
+
+            .form-actions
+              button.btn.btn-primary(type="submit") Update Sale
+              a.btn.btn-secondary(href="/saleslist") Cancel
+
+    // 
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
+
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }Footer
+    
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
+
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }footer
+      h3 Connect With Us
+      .
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
+
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }footer-links
+        
+      .
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
+
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }footer-bottom
+        | © 2025 Your Company Name. All rights reserved.
+
+

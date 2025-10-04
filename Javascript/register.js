@@ -25,7 +25,7 @@ form.addEventListener('submit', function (e) {
         alert('Passwords do not match!');
     } else {
         e.preventDefault(); // stop default form submission
-        window.location.href = "login.html"; // redirect to link
+        window.location.href = "register"; // redirect to link
     }
 });
 

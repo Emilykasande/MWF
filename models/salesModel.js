@@ -9,12 +9,13 @@ const salesSchema = new mongoose.Schema({
   transport: String,
   salesAgent: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "UserModel", 
+    ref: "UserModel",
     required: true,
   },
-  // payment: String,
   paymentMethod: String,
   date: Date,
 });
 
-module.exports = mongoose.model("SalesModel", salesSchema);
+// Prevent OverwriteModelError
+module.exports =
+  mongoose.models.SalesModel || mongoose.model("SalesModel", salesSchema);

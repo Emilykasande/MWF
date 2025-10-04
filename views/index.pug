@@ -9,8 +9,9 @@ header.hero
     p
       i Home And Office Furniture Designs Made Easy
     .btn-group-custom
-      a.btn.btn-primary.btn-lg(href="register.html") Staff
-      a.btn.btn-success.btn-lg(href="customersignup.html") Customer
+    if !user
+      a.btn.btn-primary.btn-lg(href="/login") Staff
+      a.btn.btn-success.btn-lg(href="/ecommerce") Customer
 section.cards-container#info-cards
   .card(style="background-image: url(\'Images/livingroom.jpeg\');")
     h2 About Us

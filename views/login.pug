@@ -2,29 +2,47 @@ meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css", rel="stylesheet")
 link(rel="stylesheet", href="/CSS/login.css")
+
 header.navbar
   .brand
-    a(href="index.html")
+    a(href="/index")
       img(src="/Images/mayondo logo.png", alt="Company Logo")
     h2 Mayondo Wood And Furniture
   nav.nav-links
-    a(href="index.html") Landing Page
+    a(href="/index") Landing Page
+
 main
   .login-card
     h3.text-center.mb-4 Management Login
-    form(action="/login", method="post")
-      input.form-control(type="email", name="email", placeholder="Email address", required)
-      input.form-control(type="password", name="password", placeholder="Password", required)
+    form(action="/login", method="post", id="loginForm", novalidate)
+      if error
+        .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+          strong Error: 
+          = error
+          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+      .form-floating.mb-3
+        input#email.form-control(
+          type="email",
+          name="email",
+          placeholder="Email address",
+          value=email || ""
+        )
+        label(for="email") Email address
+      .form-floating.mb-3
+        input#password.form-control(
+          type="password",
+          name="password",
+          placeholder="Password"
+        )
+        label(for="password") Password
       .d-flex.justify-content-between.align-items-center.mb-3
-        div
-          input#rememberMe(type="checkbox", name="rememberMe")
-          label(for="rememberMe") Remember me
-        a.text-decoration-none(href="#") Forgot password?
-      button.btn.btn-primary.w-100 Login
-      .text-center.mt-3
-        small
-          | Don't have an account? 
-          a(href="#") Register
+        .form-check
+          input#rememberMe.form-check-input(type="checkbox", name="rememberMe")
+          label.form-check-label(for="rememberMe") Remember me
+        //- a.text-decoration-none(href="#") Forgot password?
+      button.btn.btn-brown.w-100(type="submit") Login
+
+      //- Registration is handled by managers only
 
 footer
   h3 Connect With Us
@@ -35,7 +53,83 @@ footer
     a(href="https://facebook.com/yourpage", target="_blank") 📘 Facebook
     a(href="https://instagram.com/yourpage", target="_blank") 📸 Instagram
     a(href="https://twitter.com/yourpage", target="_blank") 🐦 Twitter
-  .footer-bottom.
-    
-    © 2025 Your Company Name. All rights reserved.
+  .footer-bottom
+    | © 2025 Your Company Name. All rights reserved.
+
+script.
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    // Real-time email validation
+    emailInput.addEventListener('blur', function() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (this.value && !emailRegex.test(this.value)) {
+        showFieldError(this, 'Please enter a valid email address');
+      } else {
+        clearFieldError(this);
+      }
+    });
+
+    // Real-time password validation
+    passwordInput.addEventListener('blur', function() {
+      if (this.value && this.value.length < 6) {
+        showFieldError(this, 'Password must be at least 6 characters');
+      } else {
+        clearFieldError(this);
+      }
+    });
+
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+      let hasErrors = false;
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInput.value) {
+        showFieldError(emailInput, 'Email address is required');
+        hasErrors = true;
+      } else if (!emailRegex.test(emailInput.value)) {
+        showFieldError(emailInput, 'Please enter a valid email address');
+        hasErrors = true;
+      } else {
+        clearFieldError(emailInput);
+      }
+
+      // Password validation
+      if (!passwordInput.value) {
+        showFieldError(passwordInput, 'Password is required');
+        hasErrors = true;
+      } else if (passwordInput.value.length < 6) {
+        showFieldError(passwordInput, 'Password must be at least 6 characters');
+        hasErrors = true;
+      } else {
+        clearFieldError(passwordInput);
+      }
+
+      if (hasErrors) {
+        e.preventDefault();
+      }
+    });
+
+    function showFieldError(input, message) {
+      clearFieldError(input);
+
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'invalid-feedback d-block';
+      errorDiv.textContent = message;
+
+      input.classList.add('is-invalid');
+      input.parentNode.appendChild(errorDiv);
+    }
+
+    function clearFieldError(input) {
+      input.classList.remove('is-invalid');
+      const existingError = input.parentNode.querySelector('.invalid-feedback');
+      if (existingError) {
+        existingError.remove();
+      }
+    }
+  });
     

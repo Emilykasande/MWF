@@ -1,0 +1,102 @@
+extends layout
+
+block content
+  .container.mt-4
+    .row.justify-content-center
+      .col-md-8
+        .card
+          .card-header.bg-primary.text-white
+            h3.mb-0 Edit Staff Member
+          .card-body
+            if error
+              .alert.alert-danger= error
+            form(action=`/staff/edit/${staff._id}`, method="POST")
+              .row
+                .col-md-6.mb-3
+                  label(for="fullname") Full Name *
+                  input.form-control(
+                    type="text",
+                    name="fullname",
+                    value=staff.fullname,
+                    required,
+                    placeholder="Enter full name"
+                  )
+
+                .col-md-6.mb-3
+                  label(for="email") Email Address *
+                  input.form-control(
+                    type="email",
+                    name="email",
+                    value=staff.email,
+                    required,
+                    placeholder="Enter email address"
+                  )
+
+              .row
+                .col-md-6.mb-3
+                  label(for="phone") Phone Number *
+                  input.form-control(
+                    type="tel",
+                    name="phone",
+                    value=staff.phone,
+                    required,
+                    placeholder="Enter phone number"
+                  )
+
+                .col-md-6.mb-3
+                  label(for="position") Position *
+                  select.form-control(name="position", required)
+                    option(value="") Select Position
+                    option(value="manager", selected=staff.position === 'manager') Manager
+                    option(value="sales Agent", selected=staff.position === 'sales Agent') Sales Agent
+
+              .row
+                .col-md-6.mb-3
+                  label(for="address") Address
+                  input.form-control(
+                    type="text",
+                    name="address",
+                    value=staff.address,
+                    placeholder="Enter address"
+                  )
+
+                .col-md-6.mb-3
+                  label(for="nin") National ID Number
+                  input.form-control(
+                    type="text",
+                    name="nin",
+                    value=staff.nin,
+                    placeholder="Enter NIN"
+                  )
+
+              .row
+                .col-md-6.mb-3
+                  label(for="staffId") Staff ID
+                  input.form-control(
+                    type="text",
+                    name="staffId",
+                    value=staff.staffId,
+                    placeholder="Enter staff ID"
+                  )
+
+                .col-md-6.mb-3
+                  label(for="nextOfKin") Next of Kin
+                  input.form-control(
+                    type="text",
+                    name="nextOfKin",
+                    value=staff.nextOfKin,
+                    placeholder="Enter next of kin name"
+                  )
+
+              .mb-3
+                label(for="nextOfKinPhone") Next of Kin Phone
+                input.form-control(
+                  type="tel",
+                  name="nextOfKinPhone",
+                  value=staff.nextOfKinPhone,
+                  placeholder="Enter next of kin phone number"
+                )
+
+              .d-flex.gap-2
+                button.btn.btn-primary(type="submit") Save Changes
+                a.btn.btn-secondary(href="/stafflist") Cancel

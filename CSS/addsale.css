@@ -1,0 +1,283 @@
+
+:root {
+  --accent: #0d6efd;
+  --danger: #d9534f;
+  --secondary: #6c757d;
+  --bg-light: #f9f9f9;
+  --text-dark: #222;
+  --radius: 10px;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #333;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/Images/wood.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+
+.navbar {
+  background-color: #8B4513;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .brand img {
+  height: 45px;
+  width: auto;
+}
+
+.navbar .brand h2 {
+  font-size: 1.2rem;
+  color: whitesmoke;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: whitesmoke;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+.btn-logout {
+  background-color: var(--danger);
+  color: #fff !important;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.btn-logout:hover {
+  background-color: red;
+}
+
+
+.container {
+  flex: 1;
+  padding: 40px;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  flex: 1;
+  min-width: 320px;
+}
+
+.card h2 {
+  margin-bottom: 20px;
+  color: var(--accent);
+  font-size: 1.3rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+}
+
+form input:focus,
+form select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 4px rgba(13, 110, 253, 0.4);
+}
+
+form button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+form button:hover {
+  background-color: #0b5ed7;
+}
+
+
+.card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.card th,
+.card td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.card th {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+.card tbody tr:hover {
+  background-color: #f2f8ff;
+}
+
+.card button.btn-primary {
+  background-color: var(--accent);
+  border: none;
+  padding: 6px 12px;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.card button.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+
+.modal-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c9302c;
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+footer {
+  background-color:#5d4037;
+  /* box-shadow: var(--shadow); */
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+  color: white;
+  margin-top: auto;
+}
+
+/* .footer-bottom {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+} */
+
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  table th, table td {
+    font-size: 0.9rem;
+  }
+}

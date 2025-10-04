@@ -1,0 +1,249 @@
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #333;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/Images/wood.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+
+header.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color:  #8B4513;
+  color: white;
+  padding: 10px 20px;
+}
+
+header.navbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header.navbar .brand img {
+  height: 40px;
+}
+
+header.navbar nav.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
+  font-size: 14px;
+}
+
+header.navbar nav.nav-links a.btn-logout {
+  background-color: #dc3545;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+/* Dropdown */
+header.navbar .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+header.navbar .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color:black;
+  min-width: 150px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+header.navbar .dropdown-content a {
+  color: #343a40;
+  padding: 8px 12px;
+  display: block;
+  text-decoration: none;
+}
+
+header.navbar .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+.table-header {
+  margin: 20px auto;
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-header h2 {
+  margin: 0;
+}
+
+.table-header a {
+  text-decoration: none;
+  font-size: 14px;
+  color: white;
+  background-color: brown;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.table-header a:hover {
+  background-color: brown;
+}
+
+table {
+  width: 95%;
+  margin: 0 auto 40px auto;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+thead {
+  background-color: #343a40;
+  color: white;
+}
+
+thead th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+button, a.button {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover, a.button:hover {
+  opacity: 0.85;
+}
+
+/* Actions Buttons */
+td form button, td a {
+  font-size: 13px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+}
+
+td a {
+  background-color: burlywood;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+td button {
+  background-color: red;
+}
+
+
+@media (max-width: 1024px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #dee2e6;
+  }
+
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+  }
+}
+footer {
+            flex-shrink: 0;
+            background:#5d4037;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 20px;
+            color: white;
+        }
+        .btn-brown {
+            background-color: #795548;
+            color: #fff;
+            border: none;
+            }
+
+            .btn-brown:hover {
+            background-color: #5d4037; 
+            color: #fff;
+            }

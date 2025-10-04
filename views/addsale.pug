@@ -1,114 +1,157 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Record New Sale
-link(rel="stylesheet", href="/CSS/sales.css")
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title My Sales
+    link(rel="stylesheet", href="/CSS/addsale.css")
 
-header.navbar
-  .brand
-    a(href="index.html")
-      img(src="/Images/mayondo logo.png", alt="Company Logo")
-    h2 Mayondo Wood And Furniture
-  nav.nav-links
-    a(href="/sales") CRM
-    a(href="analytics.html") Analytics
-    .dropdown
-      a(href="accounting.html") Accounting ▼
-      .dropdown-content
-        a(href="reports.html") Reports
-        a(href="expenses.html") Expenses
-        a(href="cashflow.html") Cash Flow
-    a(href="store.html") E-commerce
-    .search-box
-      input(type="text", placeholder="Search...")
-      button Go
+  body
+    //- Navbar
+    header.navbar
+      .brand
+        a(href="index.html")
+          img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+      nav.nav-links
+        a(href="stocktable") Stocktable
+        a(href="orders") Orders
+        a(href="addsale") Sales
+        a(href="ecommerce") Store
+        if user
+          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
 
-.container
-  .flex-container(style="display: flex; gap: 20px; flex-wrap: wrap;")
-    
-    // Add Sale Form
-    .card(style="flex: 1; min-width: 300px;")
-      h2 Add New Sale
-      form#salesForm(action="/sales", method="post")
-        label Customer Name
-        input(type="text", name="customername", placeholder="Customer Name" required, value=(formData && formData.customername) || '')
-        
-        label Product
-        input(type="text", name="product" required, value=(formData && formData.product) || '')
-        
-        label Quantity
-        input(type="number", name="quantity" required, value=(formData && formData.quantity) || '1')
-        
-        label Unit Price
-        input(type="number", step="0.01", name="price" required, value=(formData && formData.price) || '0.00')
-        
-        label Transport Required?
-        select(name="transport")
-          option(value="no", selected=(formData && formData.transport === 'no')) No
-          option(value="yes", selected=(formData && formData.transport === 'yes')) Yes (+5%)
-        
-        label Payment Type
-        select(name="paymentMethod")
-          option(value="cash", selected=(formData && formData.paymentMethod === 'cash')) Cash
-          option(value="mobile", selected=(formData && formData.paymentMethod === 'mobile')) Mobile Money
-          option(value="bank", selected=(formData && formData.paymentMethod === 'bank')) Bank Transfer
-        
-        label Date
-        input(type="date", name="date", required, value=(formData && formData.date) || '')
-        
-        button(type="submit") Record Sale
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
 
-    // Sale Receipt with Company Details
-    .card(style="flex: 1; min-width: 300px; padding: 20px;")
-      // Company Header
-      h2(style="text-align: center; margin-bottom: 5px") Mayondo Wood & Furniture
-      img(src="/Images/mayondo logo.png", alt="Company Logo", style="width: 80px; display: block; margin: 0 auto 10px auto;")
-      p(style="text-align: center; margin: 0") P.O. Box 123, Kampala, Uganda
-      p(style="text-align: center; margin: 0") 📞 +256 123 456 789 | 📧 info@mayondo.com
-      hr(style="margin: 10px 0")
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route which will destroy session and redirect to index
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+    .container
+      .flex-container(style="display: flex; gap: 20px; flex-wrap: wrap;")
+        //- Add Sale Form
+        .card(style="flex: 1; min-width: 300px;")
+          h2 Add New Sale
+          form#salesForm(action="/addsale", method="POST")
+            label(for="customername") Customer Name
+            input#customername(
+              type="text",
+              name="customername",
+              placeholder="Customer Name",
+              required,
+              value=(formData && formData.customername) || ''
+            )
+            
+            label(for="product") Product
+            input#product(
+              type="text",
+              name="product",
+              required,
+              value=(formData && formData.product) || ''
+            )
+            
+            label(for="quantity") Quantity
+            input#quantity(
+              type="number",
+              name="quantity",
+              required,
+              value=(formData && formData.quantity) || '1'
+            )
+            
+            label(for="price") Unit Price
+            input#price(
+              type="number",
+              step="0.01",
+              name="price",
+              required,
+              value=(formData && formData.price) || '0.00'
+            )
+            
+            label(for="transport") Transport Required?
+            select#transport(name="transport")
+              option(value="no", selected=(formData && formData.transport === 'no')) No
+              option(value="yes", selected=(formData && formData.transport === 'yes')) Yes (+5%)
+            
+            label(for="paymentMethod") Payment Type
+            select#paymentMethod(name="paymentMethod")
+              option(value="cash", selected=(formData && formData.paymentMethod === 'cash')) Cash
+              option(value="mobile", selected=(formData && formData.paymentMethod === 'mobile')) Mobile Money
+              option(value="bank", selected=(formData && formData.paymentMethod === 'bank')) Bank Transfer
+            
+            label(for="date") Date
+            input#date(
+              type="date",
+              name="date",
+              required,
+              value=(formData && formData.date) || ''
+            )
+            
+            button(type="submit") Record Sale
+
+      //- Agent Sales Table
+      .card(style="margin-top: 20px;")
+        h2 My Sales
+        table#salesTable
+          thead
+            tr
+              th Customer
+              th Product
+              th Quantity
+              th Unit Price
+              th Total Price
+              th Payment
+              th Sales Agent
+              th Date
+              th Actions
+          tbody
+            if sales && sales.length
+              each sale in sales
+                tr
+                  td= sale.customername
+                  td= sale.product
+                  td= sale.quantity
+                  td UGX #{sale.price}
+                  td UGX #{(sale.quantity * sale.price).toFixed(2)}
+                  td= sale.paymentMethod
+                  td= sale.salesAgent ? sale.salesAgent.fullname : "Unknown"
+                  td= sale.formattedDate
+                  td
+                    form(method="get", action=`/sales/receipt/${sale._id}`, style="display:inline")
+                      button.btn.btn-primary(type="submit") Receipt
+            else
+              tr
+                td(colspan="9") You have not recorded any sales yet.
+
+    //- Footer
+    footer
       
-      h3(style="text-align: center; margin-bottom: 15px") Sale Receipt
+      .footer-bottom
+        | © 2025 Mayondo Wood and Furniture. All rights reserved.
 
-      // Receipt Details
-      #receiptDetails.receipt-box
-      if receipt
-        p Customer: #{receipt.customername}
-        p Product: #{receipt.product}
-        p Quantity: #{receipt.quantity}
-        p Unit Price: #{receipt.price}
-        p Total Price: #{receipt.total}
-        p Transport: #{receipt.transport}
-        - var agentName = (receipt.salesAgent && receipt.salesAgent.fullname) ? receipt.salesAgent.fullname : 'N/A'
-        p Sales Agent: #{agentName}
-        p Payment Type: #{receipt.paymentMethod}
-        - var formattedDate = receipt.date ? new Date(receipt.date).toLocaleString("en-UG", { dateStyle: 'medium', timeStyle: 'short' }) : 'N/A'
-        p Date: #{formattedDate}
-        hr(style="margin: 10px 0")
-        p(style="text-align: center; font-style: italic; margin-top: 10px") Thank you for visiting our shop! We look forward to serving you again soon.
-        button(type="button", onclick="printReceipt()") 🖨 Print Receipt
-      else
-        p No receipt available yet.
-footer
-  h3 Connect With Us
-  .footer-links
-    a(href="mailto:info@yourcompany.com") 📧 Email
-    a(href="tel:+1234567890") 📞 Phone
-    a(href="https://wa.me/1234567890", target="_blank") 💬 WhatsApp
-    a(href="https://facebook.com/yourpage", target="_blank") 📘 Facebook
-    a(href="https://instagram.com/yourpage", target="_blank") 📸 Instagram
-    a(href="https://twitter.com/yourpage", target="_blank") 🐦 Twitter
-  .footer-bottom
-    p © 2025 Your Company Name. All rights reserved.
-
-script.
-  function printReceipt() {
-    const receiptContent = document.getElementById("receiptDetails").innerHTML;
-    const win = window.open("", "_blank", "width=600,height=400");
-    win.document.write('<html><head><title>Receipt</title></head><body>');
-    win.document.write(receiptContent);
-    win.document.write('</body></html>');
-    win.document.close();
-    win.print();
-  }
-
-
-//- script(src="/Javascript/sales.js")

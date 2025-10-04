@@ -1,60 +1,93 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const bcrypt = require("bcrypt"); 
 
 
 const UserModel = require("../models/userModel");
+
 router.get("/register", (req, res) => {
   res.render("register", { title: "Register" });
 });
 
 router.post("/register", async (req, res) => {
   try {
-    const user = new UserModel(req.body);
+    const {
+      fullname,
+      email,
+      phone,
+      address,
+      nin,
+      position,
+      staffId,
+      nextOfKin,
+      nextOfKinPhone,
+      password,
+      confirm_password,
+    } = req.body;
 
-    let existingUser = await UserModel.findOne({ email: req.body.email });
-    if (existingUser) {
-      return res.status(400).send("User already registered");
+    // Validate required fields
+    if (
+      !fullname ||
+      !email ||
+      !phone ||
+      !address ||
+      !nin ||
+      !position ||
+      !staffId ||
+      !nextOfKin ||
+      !nextOfKinPhone ||
+      !password ||
+      !confirm_password
+    ) {
+      return res.render("register", { error: "All fields are required" });
     }
 
-    await UserModel.register(user, req.body.password, (error) => {
-      if (error) throw error;
-      res.redirect("/login");
+    if (password !== confirm_password) {
+      return res.render("register", { error: "Passwords do not match" });
+    }
+
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      return res.render("register", { error: "User already registered" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new UserModel({
+      fullname,
+      email,
+      phone,
+      address,
+      nin,
+      position,
+      staffId,
+      nextOfKin,
+      nextOfKinPhone,
+      password: hashedPassword,
     });
+
+    await newUser.save();
+    res.redirect("/login"); // registration successful, go to login
   } catch (error) {
-    console.error(error);
-    res.status(400).send("Try again");
+    console.error("Registration error:", error);
+    res.render("register", { error: "Server error, try again" });
   }
 });
-router.get("/login", (req, res) => {
-  res.render("login", { title: "Login" });
-});
 
-router.post(
-  "/login",
-  passport.authenticate("local", { failureRedirect: "/login" }),
-  (req, res) => {
-    const user = req.user;
-    console.log("Logged-in user position:", user.position);
-    req.session.user = user;
-    req.session.save((err) => {
-      if (err) console.error("Session save error:", err);
-    });
-
-    if (user.position === "sales Agent") {
-      return res.redirect("/addsale");
-    } else if (user.position === "manager") {
-      return res.redirect("/stock");
-    } else {
-      return res.status(403).render("noneuser");
-      }
-  }
-);
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) console.error("Logout error:", err);
-    res.redirect("/login");
+
+    // Set cache control headers to prevent caching
+    res.set({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+
+    res.redirect("/index");
   });
 });
 

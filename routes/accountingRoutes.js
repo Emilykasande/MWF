@@ -27,20 +27,4 @@ router.post("/accounting", async (req, res) => {
   }
 });
 
-
-router.post("/checkout", async (req, res) => {
-  try {
-    const { items, total } = req.body; // expect JSON from frontend
-
-    const order = new Order({ items, total });
-    await order.save();
-
-    res.json({ success: true, message: "Order saved!" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-
 module.exports = router;

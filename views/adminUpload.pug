@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1 Upload New Product
+
+  form(action="/ecommerce/admin/upload" method="POST" enctype="multipart/form-data")
+    .form-group
+      label(for="name") Product Name
+      input#name(type="text" name="name" required)
+
+    .form-group
+      label(for="price") Price
+      input#price(type="number" name="price" required)
+
+    .form-group
+      label(for="image") Product Image
+      input#image(type="file" name="image" accept="image/*" required)
+
+    button(type="submit") Upload Product

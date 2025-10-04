@@ -1,29 +1,144 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Staff Registration - Mayondo Furniture & Wood
-link(rel="stylesheet", href="/CSS/register.css")
-.overlay
-  form#staffForm.registration-form(action="/register", method="post")
-    h2 Staff Registration
-    .form-group
-      label(for="fullname") Full Name
-      input#fullname(type="text", name="fullname", required)
-    .form-group
-      label(for="email") Email
-      input#email(type="email", name="email", required)
-    .form-group
-      label(for="phone") Phone Number
-      input#phone(type="tel", name="phone", pattern="[0-9]{10,15}", placeholder="Digits only", required)
-    .form-group
-      label(for="position") Position/Role
-      input#position(type="text", name="position", required)
-    .form-group
-      label(for="password") Password
-      input#password(type="password", name="password", required)
-      button.toggle-password(type="button", onclick="togglePassword(\'password\')") 👁️
-    .form-group
-      label(for="confirm_password") Confirm Password
-      input#confirm_password(type="password", name="confirm_password", required)
-      button.toggle-password(type="button", onclick="togglePassword(\'confirm_password\')") 👁️
-    button(type="submit") Register
-//- script(src="/Javascript/register.js")
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Manager Dashboard
+    link(rel="stylesheet", href="/CSS/register.css")
+
+  body
+    // Navbar
+    header.navbar
+      .brand
+        a(href="/")
+          img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+      nav.nav-links
+        a(href="/saleslist") Sales
+        a(href="/stafflist") Register
+        .dropdown
+          a(href="/analytic") Reports ▼
+          .dropdown-content
+            a(href="/accounting") Accounting
+            a(href="/dashboard") Manager
+            a(href="/suppliers") Suppliers
+        a(href="/stockreport") Stock
+        if user
+        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
+
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
+
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route which will destroy session and redirect to index
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        field.type = field.type === 'password' ? 'text' : 'password';
+      }
+    // MAIN
+    main.overlay
+      .card
+        h2 Staff Registration
+
+        if success
+          p.success-message #{success}
+        if error
+          p.error-message #{error}
+
+        form#staffForm.registration-form(action="/register", method="POST")
+          // Personal Information
+          .form-section
+            h3 Personal Information
+            .form-group
+              label(for="fullname") Full Name
+              input#fullname(type="text", name="fullname", required)
+            .form-group
+              label(for="email") Email
+              input#email(type="email", name="email", required, autocomplete="email")
+            .form-group
+              label(for="phone") Phone Number
+              input#phone(type="tel", name="phone", pattern="[0-9]{10,15}", placeholder="Digits only", required)
+            .form-group
+              label(for="address") Home Address
+              input#address(type="text", name="address", placeholder="Permanent residence", required)
+            .form-group
+              label(for="nin") National ID Number (NIN)
+              input#nin(type="text", name="nin", required)
+
+          // Job Information
+          .form-section
+            h3 Job Information
+            .form-group
+              label(for="position") Position/Role
+              input#position(type="text", name="position", required)
+            .form-group
+              label(for="staffId") Staff ID
+              input#staffId(type="text", name="staffId", placeholder="e.g. MFD-001", required)
+
+          // Emergency Contact
+          .form-section
+            h3 Emergency Contact
+            .form-group
+              label(for="nextOfKin") Next of Kin Full Name
+              input#nextOfKin(type="text", name="nextOfKin", required)
+            .form-group
+              label(for="nextOfKinPhone") Next of Kin Phone
+              input#nextOfKinPhone(type="tel", name="nextOfKinPhone", pattern="[0-9]{10,15}", required)
+
+          // Account Security
+          .form-section
+            h3 Account Security
+            .form-group
+              label(for="password") Password
+              input#password(type="password", name="password", required, autocomplete="new-password")
+              button.toggle-password(type="button", onclick="togglePassword('password')") 👁️
+            .form-group
+              label(for="confirm_password") Confirm Password
+              input#confirm_password(type="password", name="confirm_password", required, autocomplete="new-password")
+              button.toggle-password(type="button", onclick="togglePassword('confirm_password')") 👁️
+
+          // Submit
+          button(type="submit").btn Register
+
+    // FOOTER (separate from main)
+    footer
+      
+      .footer-bottom
+        | © 2025 Mayondo Wood And Furniture. All rights reserved.
+
+    // Script
+    script.
+      function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        field.type = field.type === 'password' ? 'text' : 'password';
+      }
+     
+

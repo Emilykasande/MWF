@@ -2,23 +2,35 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width,initial-scale=1")
-    title Accounting Dashboard
-    script(src="https://cdn.jsdelivr.net/npm/chart.js")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Manager Dashboard
     link(rel="stylesheet", href="/CSS/accounting.css")
+    script(src="https://cdn.jsdelivr.net/npm/chart.js") // Include Chart.js
+
+
   body
+    // Navbar
     header.navbar
       .brand
         a(href="/")
           img(src="/Images/mayondo logo.png", alt="Company Logo")
         h2 Mayondo Wood And Furniture
-
+      nav.nav-links
+        a(href="/saleslist") Sales
+        a(href="/stafflist") Register
+        .dropdown
+          .dropdown-content
+            a(href="/accounting") Accounting
+            a(href="/dashboard") Manager
+            a(href="/suppliers") Suppliers
+        a(href="/stockreport") Stock
+        if user
+        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
     h1 Accounting Dashboard
 
     form(action="/accounting" method="post")
       .form-section
         h2 Enter Financial Data
-        label Sales (ugx): 
           input(type="number", name="sales", required, value=data.sales || "")
         label COGS (ugx): 
           input(type="number", name="cogs", required, value=data.cogs || "")
@@ -69,16 +81,40 @@ html(lang="en")
 
         script(src="/Javascript/accounting.js")
 
-    footer
-      h3 Connect With Us
-      .footer-links
-        a(href="mailto:info@yourcompany.com") 📧 Email
-        a(href="tel:+1234567890") 📞 Phone
-        a(href="https://wa.me/1234567890", target="_blank") 💬 WhatsApp
-        a(href="https://facebook.com/yourpage", target="_blank") 📘 Facebook
-        a(href="https://instagram.com/yourpage", target="_blank") 📸 Instagram
-        a(href="https://twitter.com/yourpage", target="_blank") 🐦 Twitter
-      .footer-bottom.
-        © 2025 Your Company Name. All rights reserved.
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
 
-    
+    footer
+      
+      .footer-bottom.
+        © 2025 Mayondo Wood and Furniture. All rights reserved.
+
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route which will destroy session and redirect to index
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }

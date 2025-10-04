@@ -1,28 +1,49 @@
+// routes/orders.js
 const express = require("express");
 const router = express.Router();
-const OrderModel = require("../models/orderModel");
+const Order = require("../models/orderModel");
 
-// GET /orders → display orders
-router.get("/orders/new", async (req, res) => {
+// Fetch all orders and render orders.pug
+router.get("/orders", async (req, res) => {
   try {
-    const products = await ProductModel.find();
-    const customers = await CustomerModel.find();
-    res.render("orders", { products, customers });
+    const orders = await Order.find({}).sort({ date: -1 }).lean();
+    res.render("orders", { orders }); // renders orders.pug
   } catch (err) {
-    console.error(err);
-    res.render("orders", { products: [], customers: [] });
+    console.error("Error fetching orders:", err);
+    res.status(500).send("Server Error");
   }
 });
 
-// POST /orders → add a new order
-router.post("/orders", async (req, res) => {
+// Legacy order placement route - keeping for backward compatibility but not recommended
+router.post("/place-order", async (req, res) => {
   try {
-    const order = new OrderModel(req.body);
-    await order.save();
-    res.json({ success: true, order });
+    const { customerName, phoneNumber, address, items, total } = req.body;
+
+    console.log("Legacy place-order request:", {
+      customerName,
+      phoneNumber,
+      address,
+      itemsCount: items?.length,
+      total
+    });
+
+    if (!customerName || !phoneNumber || !address || !items || !total) {
+      return res.status(400).json({ success: false, message: "All fields are required" });
+    }
+
+    const newOrder = new Order({
+      customerName,
+      phoneNumber,
+      address,
+      items,
+      total,
+    });
+
+    await newOrder.save();
+    res.json({ success: true, message: "Order placed successfully!" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Failed to save order" });
+    console.error("Legacy place-order error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 

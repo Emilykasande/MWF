@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1 Add New Product
+
+  form(action="/ecommerce/product/add" method="POST" enctype="multipart/form-data")
+    .form-group
+      label(for="name") Product Name
+      input#name(type="text" name="name" placeholder="Enter product name" required)
+
+    .form-group
+      label(for="price") Price (UGX)
+      input#price(type="number" name="price" placeholder="Enter price" step="0.01" required)
+
+    .form-group
+      label(for="image") Product Image
+      input#image(type="file" name="image" accept="image/*" required)
+
+    .form-actions
+      button.btn.btn-primary(type="submit") Add Product
+      a.btn.btn-secondary(href="/ecommerce") Cancel
