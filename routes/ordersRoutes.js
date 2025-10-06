@@ -7,7 +7,7 @@ const Order = require("../models/orderModel");
 router.get("/orders", async (req, res) => {
   try {
     const orders = await Order.find({}).sort({ date: -1 }).lean();
-    res.render("orders", { orders }); // renders orders.pug
+    res.render("orders", { orders });
   } catch (err) {
     console.error("Error fetching orders:", err);
     res.status(500).send("Server Error");
@@ -43,6 +43,34 @@ router.post("/place-order", async (req, res) => {
     res.json({ success: true, message: "Order placed successfully!" });
   } catch (err) {
     console.error("Legacy place-order error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Delete an order by ID
+router.delete("/orders/:id", async (req, res) => {
+  try {
+    const order = await Order.findByIdAndDelete(req.params.id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    res.json({ success: true, message: "Order deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting order:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Update order status to delivered
+router.put("/orders/:id/deliver", async (req, res) => {
+  try {
+    const order = await Order.findByIdAndUpdate(req.params.id, { status: 'delivered' }, { new: true });
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    res.json({ success: true, message: "Order marked as delivered" });
+  } catch (err) {
+    console.error("Error updating order status:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });

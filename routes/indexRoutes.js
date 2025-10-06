@@ -3,6 +3,12 @@ const router = express.Router();
 
 //getting the manager_signup form.
 router.get("/index", (req, res) => {
+  // Set cache control to prevent caching of the index page
+  res.set({
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
   res.render("index", { title: "sales" });
 });
 

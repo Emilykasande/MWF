@@ -1,0 +1,46 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Sale Receipt
+    link(rel="stylesheet", href="/CSS/receipt.css")
+  body
+    .receipt
+      .header
+        img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+        p(style="margin: 0;") P.O. Box 1234, Kampala | Tel: +256-700-000000
+
+      .details
+        p strong Customer: #{sale.customername}
+        p strong Sales Agent: #{sale.salesAgent ? sale.salesAgent.fullname : "Unknown"}
+        p strong Date: #{sale.formattedDate}
+        p strong Payment Method: #{sale.paymentMethod}
+
+      table.table
+        thead
+          tr
+            th Product
+            th Quantity
+            th Unit Price (UGX)
+            th Subtotal (UGX)
+        tbody
+          tr
+            td= sale.product
+            td= sale.quantity
+            td= sale.price.toFixed(2)
+            td= (sale.quantity * sale.price).toFixed(2)
+
+      if sale.transport === 'yes'
+        p Transport Charge (5%): UGX #{((sale.quantity * sale.price) * 0.05).toFixed(2)}
+
+      .total
+        | Total Amount: UGX #{sale.totalprice.toFixed(2)}
+
+      button.btn-print(onclick="window.print()") Print Receipt
+
+      .footer
+        | Thank you for your purchase!  
+        br
+        | © 2025 Mayondo Wood and Furniture. All rights reserved.

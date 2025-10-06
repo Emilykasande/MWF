@@ -1,14 +1,167 @@
 const express = require("express");
 const router = express.Router();
+const SalesModel = require("../models/salesModel");
+const StockModel = require("../models/stockModel");
 
-//getting the manager_signup form.
-router.get("/addsale", (req, res) => {
-  res.render("addsale", { title: "sales" });
+
+// API route to fetch products for dropdown
+router.get("/api/products", async (req, res) => {
+  try {
+    const products = await StockModel.find({}).select('product quantity').lean();
+    console.log("API Fetched products:", products); // Debug log
+    res.json(products);
+  } catch (err) {
+    console.error("Error fetching products:", err.message);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
-router.post("/addsale", (req, res) => {
-  console.log(req.body);
-});a
+// GET /addsale
+router.get("/addsale", async (req, res) => {
+  try {
+    const products = await StockModel.find({}).lean(); // fetch all products
+    console.log("Fetched products:", products); // debug log
+
+    const sales = await SalesModel.find({
+      salesAgent: req.session.user?.id || req.session.user?._id,
+    })
+      .populate("salesAgent", "fullname")
+      .sort({ date: -1 })
+      .lean();
+
+    sales.forEach((sale) => {
+      sale.formattedDate = sale.date
+        ? new Date(sale.date).toLocaleDateString("en-GB")
+        : "N/A";
+    });
+
+    res.render("addsale", {
+      user: req.session.user,
+      formData: {},
+      sales,
+      products, 
+      receipt: null,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
+router.get("/stocktable", async (req, res) => {
+  try {
+    const products = await StockModel.find().lean();
+    console.log("Products from DB:", products);
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
+
+// POST /addsale
+router.post("/addsale", async (req, res) => {
+  try {
+    console.log("Session user ID (id):", req.session.user?.id);
+    console.log("Session user ID (_id):", req.session.user?._id);
+
+    const { customername, product, quantity, price, transport, paymentMethod, date } = req.body;
+    const qty = Number(quantity);
+    const unitPrice = Number(price);
+    let totalprice = qty * unitPrice;
+    if (transport === "yes") totalprice += totalprice * 0.05;
+
+    // Check stock
+    const stockItem = await StockModel.findOne({ product });
+    if (!stockItem || (Number(stockItem.quantity) || 0) < qty) {
+      throw new Error("Not enough stock available");
+    }
+
+    // Deduct stock
+    await StockModel.findByIdAndUpdate(
+      stockItem._id,
+      { quantity: (Number(stockItem.quantity) || 0) - qty },
+      { runValidators: false }
+    );
+
+    // Save sale
+    const newSale = await SalesModel.create({
+      customername,
+      product,
+      quantity: qty,
+      price: unitPrice,
+      totalprice,
+      transport,
+      paymentMethod,
+      salesAgent: req.session.user?.id || req.session.user?._id || null,
+      date: date ? new Date(date) : new Date(),
+    });
+
+    // Fetch updated sales
+    const sales = await SalesModel.find({ salesAgent: req.session.user?.id || req.session.user?._id })
+      .populate("salesAgent", "fullname")
+      .sort({ date: -1 })
+      .lean();
+
+    sales.forEach((sale) => {
+      sale.formattedDate = sale.date
+        ? new Date(sale.date).toLocaleDateString("en-GB")
+        : "N/A";
+    });
+
+    res.render("addsale", {
+      user: req.session.user,
+      formData: {},
+      sales,
+      products: await StockModel.find({}).lean(),
+      receipt: newSale,
+    });
+  } catch (err) {
+    console.error("Error in POST /addsale:", err.message);
+
+    // Fetch sales and products on error
+    const sales = await SalesModel.find({ salesAgent: req.session.user?.id || req.session.user?._id })
+      .populate("salesAgent", "fullname")
+      .sort({ date: -1 })
+      .lean();
+    const products = await StockModel.find({}).lean();
+
+    sales.forEach((sale) => {
+      sale.formattedDate = sale.date
+        ? new Date(sale.date).toLocaleDateString("en-GB")
+        : "N/A";
+    });
+
+    res.render("addsale", {
+      user: req.session.user,
+      formData: req.body,
+      sales,
+      products,
+      receipt: null,
+      errorMessage: err.message,
+    });
+  }
+});
+// GET /sales/receipt/:id
+router.get("/sales/receipt/:id", async (req, res) => {
+  try {
+    const sale = await SalesModel.findById(req.params.id)
+      .populate("salesAgent", "fullname")
+      .lean();
+
+    if (!sale) return res.status(404).send("Sale not found");
+
+    sale.formattedDate = sale.date
+      ? new Date(sale.date).toLocaleDateString("en-GB")
+      : "N/A";
+
+    res.render("receipt", { sale });
+  } catch (err) {
+    console.error("Error fetching receipt:", err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 
 module.exports = router;
