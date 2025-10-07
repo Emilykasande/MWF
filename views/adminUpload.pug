@@ -1,6 +1,37 @@
-extends layout
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title My Sales
+    link(rel="stylesheet", href="/CSS/addsale.css")
 
-block content
+  body
+    //- Navbar
+    header.navbar
+      .brand
+        a(href="index.html")
+          img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+      nav.nav-links
+        a(href="admin/upload") Storeupdate
+        a(href="orders") Orders
+        a(href="addsale") Sales
+        a(href="ecommerce") Store
+        if user
+          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
+
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
+
   h1 Upload New Product
 
   form(action="/ecommerce/admin/upload" method="POST" enctype="multipart/form-data")
@@ -17,3 +48,10 @@ block content
       input#image(type="file" name="image" accept="image/*" required)
 
     button(type="submit") Upload Product
+
+    // FOOTER
+  footer
+   
+    .footer-bottom
+      | © 2025 Mayondo wood and furniture. All rights reserved.
+

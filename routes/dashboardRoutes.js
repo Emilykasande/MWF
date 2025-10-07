@@ -8,6 +8,7 @@ const orderModel = require("../models/orderModel");
 const salesModel = require("../models/salesModel");
 const stockModel = require("../models/stockModel");
 const suppliesModel = require("../models/SuppliesModel");
+const notificationsModel = require("../models/notificationsModel");
 
 // Dashboard GET route
 router.get("/dashboard", async (req, res) => {
@@ -54,6 +55,9 @@ router.get("/dashboard", async (req, res) => {
     // Suppliers
     const totalSuppliers = await suppliesModel.countDocuments();
 
+    // Notifications
+    const notifications = await notificationsModel.find().sort({ date: -1 }).limit(4);
+
     res.render("dashboard", {
       totalSales,
       totalAgents,
@@ -62,6 +66,7 @@ router.get("/dashboard", async (req, res) => {
       totalExpenses,
       netProfit,
       totalSuppliers,
+      notifications,
     });
   } catch (err) {
     console.error("Dashboard error:", err);

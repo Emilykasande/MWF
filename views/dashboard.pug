@@ -90,10 +90,11 @@ html(lang="en")
       // Notifications
       .notifications
         h3 Recent Notifications
-        .notification.low-stock ⚠️ Low stock: Only 3 Wooden Chairs left
-        .notification.payment ✅ Payment received: UGX 1,200,000 from Karl Patrick.
-        .notification.delayed ⏳ Delayed payment: Grace's order overdue by 3 days
-        .notification.order 🛒 New order: Sarah ordered 2 Office Desks
+        if notifications && notifications.length
+          each notification in notifications
+            .notification(class=notification.type) #{notification.message}
+        else
+          .notification No notifications available
 
     // Footer
     footer

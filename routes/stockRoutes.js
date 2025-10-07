@@ -56,6 +56,32 @@ async function increaseStock(productName, category, quantityToAdd, additionalFie
   }
 }
 
+// GET all stock and render the table for admin/upload
+// GET all stock and render the table for admin/upload
+router.get("/admin/upload", async (req, res) => {
+  try {
+    const query = req.query.q ? req.query.q.trim() : "";
+
+    // Build filter for search
+    let filter = {};
+    if (query) {
+      filter = {
+        $or: [
+          { product: { $regex: query, $options: "i" } }, // search product name
+          { supplier: { $regex: query, $options: "i" } }, // search supplier
+          { status: { $regex: query, $options: "i" } }, // search status
+        ],
+      };
+    }
+
+    const items = await StockModel.find(filter).sort({ date: -1 }).lean();
+    res.render("adminUpload", { items, editItem: null, query });
+  } catch (error) {
+    console.error("Error fetching stock:", error.message);
+    res.status(400).send("Unable to get data from the database!");
+  }
+});
+
 // GET all stock and render the table
 router.get("/stock", async (req, res) => {
   try {
@@ -117,7 +143,7 @@ router.post("/stock", async (req, res) => {
   }
 });
 
-
+// API route for products
 router.get("/stock/api/products", async (req, res) => {
   try {
     const products = await StockModel.find({}).select("product category quantity price status").lean();
