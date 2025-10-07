@@ -12,44 +12,49 @@ header.navbar
     a(href="/index") Landing Page
 
 main
-  .login-card
-    h3.text-center.mb-4 Management Login
-    form(action="/login", method="post", id="loginForm", novalidate)
-      if error
-        .alert.alert-danger.alert-dismissible.fade.show(role="alert")
-          strong Error: 
-          = error
-          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
-      .form-floating.mb-3
-        input#email.form-control(
-          type="email",
-          name="email",
-          placeholder="Email address",
-          value=email || ""
-        )
-        label(for="email") Email address
-      .form-floating.mb-3
-        input#password.form-control(
-          type="password",
-          name="password",
-          placeholder="Password"
-        )
-        label(for="password") Password
-      .d-flex.justify-content-between.align-items-center.mb-3
-        .form-check
-          input#rememberMe.form-check-input(type="checkbox", name="rememberMe")
-          label.form-check-label(for="rememberMe") Remember me
-        //- a.text-decoration-none(href="#") Forgot password?
-      button.btn.btn-brown.w-100(type="submit") Login
+  .login-container
+    .combined-card
+      .login-section
+        h3.text-center.mb-4 Management Login
+        form(action="/login", method="post", id="loginForm", novalidate)
+          if error
+            .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+              strong Error: 
+              = error
+              button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+          .form-floating.mb-3
+            input#email.form-control(
+              type="email",
+              name="email",
+              placeholder="Email address",
+              value=email || ""
+            )
+            label(for="email") Email address
+          .form-floating.mb-3
+            input#password.form-control(
+              type="password",
+              name="password",
+              placeholder="Password"
+            )
+            label(for="password") Password
+          .d-flex.justify-content-between.align-items-center.mb-3
+            input#rememberMe.form-check-input(type="checkbox", name="rememberMe")
+            label.form-check-label(for="rememberMe") Remember me
+            //- a.text-decoration-none(href="#") Forgot password?
+          button.btn.btn-brown.w-100(type="submit", style="background-color: #795548 !important; color: #fff !important; border: none !important;") Login
 
-      //- Registration is handled by managers only
+          //- Registration is handled by managers only
 
+      .divider
+
+      .image-section
+        .welcome-text Welcome!
+        img(src="/Images/orange.jpg", alt="Furniture Display")
 footer
   h3 Connect With Us
   .footer-links
     a(href="mailto:info@yourcompany.com") 📧 Email
     a(href="tel:+1234567890") 📞 Phone
-    a(href="https://wa.me/1234567890", target="_blank") 💬 WhatsApp
     a(href="https://facebook.com/yourpage", target="_blank") 📘 Facebook
     a(href="https://instagram.com/yourpage", target="_blank") 📸 Instagram
     a(href="https://twitter.com/yourpage", target="_blank") 🐦 Twitter

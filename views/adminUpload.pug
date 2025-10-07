@@ -4,7 +4,7 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title My Sales
-    link(rel="stylesheet", href="/CSS/addsale.css")
+    link(rel="stylesheet", href="/CSS/product.css")
 
   body
     //- Navbar
@@ -14,10 +14,10 @@ html(lang="en")
           img(src="/Images/mayondo logo.png", alt="Company Logo")
         h2 Mayondo Wood And Furniture
       nav.nav-links
-        a(href="admin/upload") Storeupdate
-        a(href="orders") Orders
-        a(href="addsale") Sales
-        a(href="ecommerce") Store
+        a(href="/admin/upload") Storeupdate
+        a(href="/orders") Orders
+        a(href="/addsale") Sales
+        a(href="/ecommerce") Store
         if user
           a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
 
@@ -32,22 +32,23 @@ html(lang="en")
           button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
           button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
 
-  h1 Upload New Product
+  .container-card
+    h1 Upload New Product
 
-  form(action="/ecommerce/admin/upload" method="POST" enctype="multipart/form-data")
-    .form-group
-      label(for="name") Product Name
-      input#name(type="text" name="name" required)
+    form(action="/ecommerce/admin/upload" method="POST" enctype="multipart/form-data")
+      .form-group
+        label(for="name") Product Name
+        input#name(type="text" name="name" required)
 
-    .form-group
-      label(for="price") Price
-      input#price(type="number" name="price" required)
+      .form-group
+        label(for="price") Price
+        input#price(type="number" name="price" required)
 
-    .form-group
-      label(for="image") Product Image
-      input#image(type="file" name="image" accept="image/*" required)
+      .form-group
+        label(for="image") Product Image
+        input#image(type="file" name="image" accept="image/*" required)
 
-    button(type="submit") Upload Product
+      button(type="submit") Upload Product
 
     // FOOTER
   footer

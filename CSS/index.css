@@ -30,12 +30,20 @@
             font-size: 1.3rem;
             margin-bottom: 20px;
         }
+/* 
+        .btn-group-custom {
+            display: flex;
+            gap: 50px;
+            justify-content: center;
+        } */
 
         .btn-group-custom {
             display: flex;
-            gap: 15px;
+            gap: 30px; /* Adjust this value for more or less spacing */
             justify-content: center;
+            flex-wrap: wrap; /* ensures buttons wrap nicely on smaller screens */
         }
+
 
        
         .cards-container {

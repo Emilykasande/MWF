@@ -85,7 +85,7 @@ body::before {
 }
 
 .nav-links a:hover {
-  color: var(--accent);
+  color: whitesmoke;
 }
 
 .btn-logout {
@@ -163,7 +163,7 @@ form button {
 }
 
 form button:hover {
-  background-color: brown;
+  background-color:whitesmoke;
 }
 
 

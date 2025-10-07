@@ -1,0 +1,251 @@
+/* --- Root Variables --- */
+:root {
+    --card-radius: 12px;
+    --shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    --accent-color: #795548;
+    --accent-hover: #5d4037;
+}
+
+/* --- Reset & Body --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* needed for the pseudo-element */
+    color: #333; /* ensures text is readable */
+    }
+
+    /* Blurred background */
+    body::before {
+    content: "";
+    position: fixed;      /* covers the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/Images/wood.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(8px);   
+    z-index: -1;          
+    }
+
+/* Optional: Add a slight overlay for readability */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.2); 
+  z-index: -1;
+}
+
+      
+
+/* --- Navbar --- */
+
+        .navbar {
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background:   #8B4513;
+            padding: 10px 20px;
+        }
+
+.navbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar .brand img {
+    height: 40px;
+    width: auto;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 15px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: var(--accent-hover);
+}
+
+/* --- Card Container --- */
+.container-card {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #ffffff; /* solid white */
+    border-radius: 16px; /* slightly bigger rounded corners */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* soft shadow for depth */
+    padding: 40px 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Page Heading --- */
+.container-card h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #795548; /* accent color */
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* --- Form Styling --- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+form label {
+    font-weight: 600;
+    color: #333;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="file"] {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form input[type="file"]:focus {
+    border-color: #795548;
+    box-shadow: 0 0 6px rgba(121, 85, 72, 0.3);
+    outline: none;
+}
+
+form button[type="submit"] {
+    padding: 14px 20px;
+    background-color: #795548; /* accent color */
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+form button[type="submit"]:hover {
+    background-color: #5d4037; /* darker shade on hover */
+    transform: translateY(-2px);
+}
+
+  
+        footer {
+            flex-shrink: 0;
+            background:#5d4037;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 20px;
+            color: white;
+        }
+        .btn-brown {
+            background-color: #795548;
+            color: #fff;
+            border: none;
+            }
+
+            .btn-brown:hover {
+            background-color: #5d4037; /* darker brown for hover */
+            color: #fff;
+            }
+
+
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+    .container-card {
+        padding: 20px;
+        margin: 15px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .nav-links a {
+        margin-left: 0;
+    }
+}
