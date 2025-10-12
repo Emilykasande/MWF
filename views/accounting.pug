@@ -19,50 +19,63 @@ html(lang="en")
         a(href="/saleslist") Sales
         a(href="/stafflist") Register
         .dropdown
+          a(href="/analytic") Reports ▼
           .dropdown-content
             a(href="/accounting") Accounting
             a(href="/dashboard") Manager
             a(href="/suppliers") Suppliers
         a(href="/stockreport") Stock
         if user
-        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
-    h1 Accounting Dashboard
-
-    form(action="/accounting" method="post")
-      .form-section
+          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout" style="background-color: red; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; display: inline-block;") Logout
+    form(action="/accounting" method="post", style="width: calc(100% - 80px); margin: 0 40px; padding: 0 40px; box-sizing: border-box;")
+      .form-header(style="display: flex; justify-content: flex-start; margin-bottom: 20px;")
+        h1(style="margin: 0; font-size: 24px; color: #333;") Accounting Dashboard
+      .form-section(style="display: block; width: 100%;")
         h2 Enter Financial Data
-          input(type="number", name="sales", required, value=data.sales || "")
-        label COGS (ugx): 
-          input(type="number", name="cogs", required, value=data.cogs || "")
-        label Expenses (ugx): 
-          input(type="number", name="expenses", required, value=data.expenses || "")
-        label Salaries (ugx): 
-          input(type="number", name="salaries", required, value=data.salaries || "")
-        label Rent (ugx): 
-          input(type="number", name="rent", required, value=data.rent || "")
-        label Utilities (ugx): 
-          input(type="number", name="utilities", required, value=data.utilities || "")
-        label Marketing (ugx): 
-          input(type="number", name="marketing", required, value=data.marketing || "")
-        label Cash Flow (comma separated): 
-          input(type="text", name="cashFlow", placeholder="5000,6000,7000", value=data.cashFlow ? data.cashFlow.join(",") : "")
-        label Receivables (ugx): 
-          input(type="number", name="receivables", required, value=data.receivables || "")
-        label Payables (ugx): 
-          input(type="number", name="payables", required, value=data.payables || "")
-        button(type="submit") Update Dashboard
+        .form-group
+          label Sales (ugx): 
+          input(type="number", name="sales", required, value=data.sales || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label COGS (ugx): 
+          input(type="number", name="cogs", required, value=data.cogs || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Expenses (ugx): 
+          input(type="number", name="expenses", required, value=data.expenses || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Salaries (ugx): 
+          input(type="number", name="salaries", required, value=data.salaries || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Rent (ugx): 
+          input(type="number", name="rent", required, value=data.rent || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Utilities (ugx): 
+          input(type="number", name="utilities", required, value=data.utilities || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Marketing (ugx): 
+          input(type="number", name="marketing", required, value=data.marketing || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Cash Flow (comma separated): 
+          input(type="text", name="cashFlow", placeholder="5000,6000,7000", value=data.cashFlow ? data.cashFlow.join(",") : "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Receivables (ugx): 
+          input(type="number", name="receivables", required, value=data.receivables || "", style="width: 100%; box-sizing: border-box;")
+        .form-group
+          label Payables (ugx): 
+          input(type="number", name="payables", required, value=data.payables || "", style="width: 100%; box-sizing: border-box;")
+        .form-group(style="text-align: center; margin-top: 20px;")
+          button(type="submit", style="padding: 10px 30px; background-color: #5d4037; color: white; border: none; border-radius: 4px; cursor: pointer;") Update Dashboard
 
-    .grid
-      .card
+    .grid(style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; width: calc(100% - 80px); margin-left: 40px; margin-right: 40px; padding: 0 40px; box-sizing: border-box;")
+      .card(style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; min-height: 300px;")
         h2 Profit & Loss
         canvas#plChart
-      .card
+      .card(style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; min-height: 300px;")
         h2 Expenses Breakdown
         canvas#expenseChart
-      .card
+      .card(style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; min-height: 300px;")
         h2 Cash Flow
         canvas#cashChart
-      .card
+      .card(style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; min-height: 300px;")
         h2 Receivables vs Payables
         canvas#arApChart
 

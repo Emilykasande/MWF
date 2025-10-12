@@ -52,8 +52,12 @@ html(lang="en")
             input#date(type="date", name="date", required, value=sale.date ? new Date(sale.date).toISOString().split('T')[0] : '')
 
             .form-actions
-              button.btn.btn-primary(type="submit") Update Sale
-              a.btn.btn-secondary(href="/saleslist") Cancel
+              button.btn.btn-success(type="submit")
+                i.fas.fa-save.me-2
+                | Update Sale
+              a.btn.btn-outline-secondary(href="/saleslist")
+                i.fas.fa-times.me-2
+                | Cancel
 
     // 
     // Logout Confirmation Modal

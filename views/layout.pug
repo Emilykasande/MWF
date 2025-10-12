@@ -12,16 +12,16 @@ body
         img(src="/Images/mayondo logo.png", alt="Company Logo")
       h2 Mayondo Wood And Furniture
     nav.nav-links
-      a(href="sales") CRM
-      a(href="analytic") Analytics
-      a(href="stafflist") Reports
+      a(href="/saleslist") Sales
+      a(href="/stafflist") Staff
+      a(href="/analytic") Reports
       // dropdown for accounting
       .dropdown
         .dropdown-content
-          a(href="staff") Reports
-          //- a(href="expenses.html") Expenses
-          //- a(href="cashflow.html") Cash Flow
-      a(href="ecommerce") E-commerce
+          a(href="/accounting") Accounting
+          a(href="/dashboard") Manager
+          a(href="/suppliers") Suppliers
+      a(href="/stockreport") Stock
       // replace search with Logout button
       if user
         a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout

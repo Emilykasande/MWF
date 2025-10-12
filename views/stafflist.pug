@@ -7,7 +7,8 @@ html(lang="en")
     link(rel="stylesheet", href="/CSS/staff.css")
 
   body
-    // Navbar
+
+    // Navbar - back to top
     header.navbar
       .brand
         a(href="/")
@@ -15,17 +16,16 @@ html(lang="en")
         h2 Mayondo Wood And Furniture
       nav.nav-links
         a(href="/saleslist") Sales
-        a(href="/stafflist") Register
+        a(href="/stafflist", style="text-decoration: none;") Register
         .dropdown
           a(href="/analytic") Reports ▼
           .dropdown-content
             a(href="/accounting") Accounting
+             a(href="/dashboard") Manager
             a(href="/suppliers") Suppliers
         a(href="/stockreport") Stock
         if user
-          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
-
-    // Success Message
+          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout" style="background-color: red; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; display: inline-block;") Logout
     if success
       .alert.alert-success.alert-dismissible.fade.show(style="margin: 20px;", role="alert")
         strong Success!
@@ -42,18 +42,18 @@ html(lang="en")
     table
       thead
         tr
-          th Full Name
-          th Email
-          th Phone
-          th Address
-          th NIN
-          th Staff ID
-          th Position
-          th Next of Kin
-          th Next of Kin Phone
-          th Registered On
+          th(style="font-size: 12px; padding: 8px 4px;") Full Name
+          th(style="font-size: 12px; padding: 8px 4px;") Email
+          th(style="font-size: 12px; padding: 8px 4px;") Phone
+          th(style="font-size: 12px; padding: 8px 4px;") Address
+          th(style="font-size: 12px; padding: 8px 4px;") NIN
+          th(style="font-size: 12px; padding: 8px 4px;") Staff ID
+          th(style="font-size: 12px; padding: 8px 4px;") Position
+          th(style="font-size: 12px; padding: 8px 4px;") Next of Kin
+          th(style="font-size: 12px; padding: 8px 4px;") Kin Phone
+          th(style="font-size: 12px; padding: 8px 4px;") Registered
           if user && user.position === 'manager'
-            th Actions
+            th(style="font-size: 12px; padding: 8px 4px;") Actions
 
       tbody
         if users && users.length
@@ -70,9 +70,9 @@ html(lang="en")
               td= staff.nextOfKinPhone
               td= new Date(staff.createdAt).toLocaleString()
               if user && user.position === 'manager'
-                td
-                  a(href=`/staff/edit/${staff._id}`, style="display:inline-block; padding:4px 8px; margin-right:10px; background-color:burlywood; color:white; text-decoration:none; border-radius:4px; font-size:14px; cursor:pointer;") Edit
-                  button(type="button", onclick=`showDeleteConfirmation('${staff._id}', '${staff.fullname}', 'staff member')`, style="padding:4px 8px; background-color:red; color:white; border:none; border-radius:4px; cursor:pointer; font-size:14px;") Delete
+                td(style="white-space: nowrap; min-width: 100px;")
+                  a(href=`/staff/edit/${staff._id}`, style="display:inline-block; padding:4px 8px; margin-right:12px; background-color:burlywood; color:white; text-decoration:none; border-radius:4px; font-size:13px; cursor:pointer;") Edit
+                  button(type="button", onclick=`showDeleteConfirmation('${staff._id}', '${staff.fullname}', 'staff member')`, style="padding:4px 8px; margin-left:6px; background-color:red; color:white; border:none; border-radius:4px; cursor:pointer; font-size:13px;") Delete
         else
           tr
             td(colspan= user && user.position === 'manager' ? 11 : 10) No users found
@@ -138,9 +138,10 @@ html(lang="en")
         }
       }
 
-    // ✅ Footer outside the table
-    footer
-  
+    // ✅ Content ends here
+
+    // Footer - static at bottom
+    footer(style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #5d4037; color: white; text-align: center; padding: 10px; border-top: 1px solid #ddd;")
       .footer-bottom
         | © 2025 Your Company Name. All rights reserved.
 .

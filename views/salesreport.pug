@@ -24,7 +24,7 @@ html(lang="en")
             a(href="/suppliers") Suppliers
         a(href="/stockreport") Stock
         if user
-        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
+        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout" style="background-color: red; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; display: inline-block;") Logout
 
     // Logout Confirmation Modal
     #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
@@ -59,82 +59,288 @@ html(lang="en")
         }
       }
 
+      // Print function for sales report
+      function printReport() {
+        window.print();
+      }
+
       const searchInput = document.getElementById("search-sales-table");
-      const table = document.getElementById("salesTable").getElementsByTagName("tbody")[0];
+      const table = document.getElementById("salesTable");
+      let tbody = table ? table.getElementsByTagName("tbody")[0] : null;
 
-      searchInput.addEventListener("keyup", function() {
-        const filter = searchInput.value.toLowerCase();
-        const rows = table.getElementsByTagName("tr");
-
-        for (let i = 0; i < rows.length; i++) {
-          let cells = rows[i].getElementsByTagName("td");
-          let rowText = "";
-          for (let j = 0; j < cells.length; j++) {
-            rowText += cells[j].textContent.toLowerCase() + " ";
+      if (searchInput && table) {
+        searchInput.addEventListener("keyup", function() {
+          const filter = searchInput.value.toLowerCase();
+          
+          // If tbody doesn't exist (no data), try to find it again
+          if (!tbody) {
+            tbody = table.getElementsByTagName("tbody")[0];
           }
-          rows[i].style.display = rowText.includes(filter) ? "" : "none";
-        }
-      });
+          
+          if (tbody) {
+            const rows = tbody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+              let cells = rows[i].getElementsByTagName("td");
+              let rowText = "";
+              for (let j = 0; j < cells.length; j++) {
+                rowText += cells[j].textContent.toLowerCase() + " ";
+              }
+              rows[i].style.display = rowText.includes(filter) ? "" : "none";
+            }
+          }
+        });
+      }
   .container
-    .card(style="margin-top: 20px")
-      h2 Sales Report (Summary)
+    .card(style="margin-top: 20px; margin-bottom: 80px;")
+      h2 Sales Report 
 
       // Manager-only button to go to full report page
       if user && user.position && user.position.toLowerCase() === "manager"
         .d-flex(style="display: flex; justify-content: flex-end; margin-bottom: 15px;")
-          a.btn.btn-success(href="/sales/salesreport/download" target="_blank") 📑 Download / Print Report
+      // Print button for all users
+      .d-flex(style="display: flex; justify-content: flex-end; margin-bottom: 15px;")
+        button.btn.btn-primary(onclick="printReport()" style="margin-left: 10px;")  Print PDF
 
-      // Search functionality
-      .search-container(style="margin-bottom: 20px;")
-        input#search-sales-table(
-          type="text", 
-          placeholder="🔍 Search sales...", 
-          style="padding: 8px; width: 300px; border: 1px solid #ccc; border-radius: 4px;"
-        )
+      // Summary Cards
+      if summary
+        .summary-cards(style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;")
+          .summary-card(style="background: #e3f2fd; padding: 15px; border-radius: 8px; text-align: center;")
+            h4(style="margin: 0 0 10px 0; color: #1976d2;") Total Sales
+            p(style="margin: 0; font-size: 24px; font-weight: bold; color: #1976d2;") UGX #{summary.totalSales.toLocaleString()}
+          .summary-card(style="background: #fff3e0; padding: 15px; border-radius: 8px; text-align: center;")
+            h4(style="margin: 0 0 10px 0; color: #f57c00;") Total Quantity
+            p(style="margin: 0; font-size: 24px; font-weight: bold; color: #f57c00;") #{summary.totalQuantity}
+          .summary-card(style="background: #e8f5e8; padding: 15px; border-radius: 8px; text-align: center;")
+            h4(style="margin: 0 0 10px 0; color: #388e3c;") Transactions
+            p(style="margin: 0; font-size: 24px; font-weight: bold; color: #388e3c;") #{summary.totalTransactions}
+          .summary-card(style="background: #fce4ec; padding: 15px; border-radius: 8px; text-align: center;")
+            h4(style="margin: 0 0 10px 0; color: #c2185b;") Products
+            p(style="margin: 0; font-size: 24px; font-weight: bold; color: #c2185b;") #{summary.uniqueProducts}
 
-      table#salesTable
+      // Enhanced Search and Filter functionality
+      .search-container(style="margin-bottom: 20px; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6;")
+        .filter-row(style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;")
+          .search-group
+            label(style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;")  Search:
+            input#search-sales-table(
+              type="text",
+              placeholder="Enter customer, product, agent, or amount...",
+              style="padding: 10px; width: 300px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px;"
+            )
+
+          .filter-group
+            label(style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;")  Filter By:
+            select#filter-type(style="padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; min-width: 150px;")
+              option(value="all") All Data
+              option(value="customer") Customer Name
+              option(value="product") Product
+              option(value="agent") Sales Agent
+              option(value="payment") Payment Method
+
+          .results-info(style="margin-left: auto; color: #6c757d;")
+            span#results-count Results: Loading...
+
+        .date-filters(style="display: flex; gap: 15px; align-items: end; flex-wrap: wrap;")
+          .filter-group
+            label(style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;")  Date From:
+            input#date-from(
+              type="date",
+              style="padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px;"
+            )
+
+          .filter-group
+            label(style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;")  Date To:
+            input#date-to(
+              type="date",
+              style="padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px;"
+            )
+
+          .filter-group
+            button#clear-filters.btn.btn-outline-secondary(style="padding: 10px 20px; border-radius: 4px; font-size: 14px; height: fit-content;")  Clear All Filters
+
+        .filter-status(style="margin-top: 10px; font-size: 12px; color: #6c757d;")
+
+      table#salesTable.table.table-striped
         thead
           tr
-            th Product
-            th Total Quantity
-            th Total Sales
             th Date
+            th Customer
+            th Product
+            th Quantity
+            th Unit Price
+            th Total Price
+            th Payment Method
+            th Sales Agent
+            th Transport
         tbody
           if sales && sales.length
             each sale in sales
               tr
-                td= sale._id
-                td= sale.totalQuantity
-                td= sale.totalSales.toFixed(2)
-                td= sale.date ? new Date(sale.date).toLocaleDateString("en-GB") : ""
+                td= new Date(sale.date).toLocaleDateString()
+                td= sale.customername || 'N/A'
+                td= sale.product
+                td= sale.quantity
+                td= 'UGX ' + (sale.price || 0).toLocaleString()
+                td= 'UGX ' + (sale.totalprice || 0).toLocaleString()
+                td= sale.paymentMethod || 'N/A'
+                td= sale.salesAgent ? sale.salesAgent.fullname : 'N/A'
+                td= sale.transport || 'N/A'
           else
             tr
-              td(colspan="4") No sales recorded yet.
+              td(colspan="9") No sales recorded yet.
 
               // Footer
-    footer
+    footer(style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #5d4037; color: white; text-align: center; padding: 8px; border-top: 1px solid #ddd; width: 100%; z-index: 1000; font-size: 14px;")
       h3 Connect With Us
       .footer-links
         tter
       .footer-bottom
         | © 2025 Your Company Name. All rights reserved.
 
-  // Search script
+  // Enhanced Search and Filter script
   script.
-    const searchInput = document.getElementById("search-sales-table");
-    const table = document.getElementById("salesTable").getElementsByTagName("tbody")[0];
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById("search-sales-table");
+      const dateFromInput = document.getElementById("date-from");
+      const dateToInput = document.getElementById("date-to");
+      const clearButton = document.getElementById("clear-filters");
+      const table = document.getElementById("salesTable");
+      let tbody = table ? table.getElementsByTagName("tbody")[0] : null;
 
-    searchInput.addEventListener("keyup", function() {
-      const filter = searchInput.value.toLowerCase();
-      const rows = table.getElementsByTagName("tr");
-
-      for (let i = 0; i < rows.length; i++) {
-        let cells = rows[i].getElementsByTagName("td");
-        let rowText = "";
-        for (let j = 0; j < cells.length; j++) {
-          rowText += cells[j].textContent.toLowerCase() + " ";
-        }
-        rows[i].style.display = rowText.includes(filter) ? "" : "none";
+      // Print function for sales report
+      window.printReport = function() {
+        window.print();
       }
+
+      // Enhanced search and filter functionality
+      function applyFilters() {
+        console.log("Applying enhanced filters...");
+        
+        if (!table) {
+          console.log("❌ Table not found!");
+          return;
+        }
+        
+        if (!tbody) {
+          tbody = table.getElementsByTagName("tbody")[0];
+          if (!tbody) {
+            console.log("❌ No tbody found - no data to filter");
+            updateResultsCount(0);
+            return;
+          }
+        }
+
+        const searchFilter = searchInput ? searchInput.value.toLowerCase().trim() : "";
+        const filterType = document.getElementById("filter-type") ? document.getElementById("filter-type").value : "all";
+        const dateFrom = dateFromInput ? dateFromInput.value : "";
+        const dateTo = dateToInput ? dateToInput.value : "";
+        
+        console.log("🔍 Search:", searchFilter, "| Filter:", filterType, "| Dates:", dateFrom, "to", dateTo);
+        
+        const rows = tbody.getElementsByTagName("tr");
+        console.log("📊 Total rows found:", rows.length);
+        
+        let visibleCount = 0;
+
+        for (let i = 0; i < rows.length; i++) {
+          const cells = rows[i].getElementsByTagName("td");
+          if (cells.length < 9) {
+            console.log("⚠️ Row " + i + " has insufficient cells:", cells.length);
+            continue;
+          }
+
+          let showRow = true;
+
+          // Enhanced search with column-specific filtering
+          if (searchFilter) {
+            let searchTarget = "";
+            
+            switch(filterType) {
+              case "customer":
+                searchTarget = cells[1].textContent.toLowerCase(); // Customer column
+                break;
+              case "product":
+                searchTarget = cells[2].textContent.toLowerCase(); // Product column
+                break;
+              case "agent":
+                searchTarget = cells[7].textContent.toLowerCase(); // Sales Agent column
+                break;
+              case "payment":
+                searchTarget = cells[6].textContent.toLowerCase(); // Payment Method column
+                break;
+              default: // "all"
+                for (let j = 0; j < cells.length; j++) {
+                  searchTarget += cells[j].textContent.toLowerCase() + " ";
+                }
+            }
+            
+            showRow = searchTarget.includes(searchFilter);
+            console.log("🔎 Row " + i + " (" + filterType + "):", showRow, "- Target:", searchTarget.substring(0, 40) + "...");
+          }
+
+          // Date filtering
+          if (dateFrom || dateTo) {
+            const rowDateStr = cells[0].textContent; // Date column (first column)
+            if (rowDateStr && rowDateStr !== 'N/A') {
+              const rowDate = new Date(rowDateStr);
+              if (dateFrom) {
+                const fromDate = new Date(dateFrom);
+                if (rowDate < fromDate) showRow = false;
+              }
+              if (dateTo) {
+                const toDate = new Date(dateTo);
+                toDate.setHours(23, 59, 59, 999); // End of day
+                if (rowDate > toDate) showRow = false;
+              }
+            }
+          }
+
+          rows[i].style.display = showRow ? "" : "none";
+          if (showRow) visibleCount++;
+        }
+        
+        console.log("✅ Filter applied. Visible rows:", visibleCount);
+        updateResultsCount(visibleCount);
+      }
+
+      function updateResultsCount(count) {
+        const resultsElement = document.getElementById("results-count");
+        if (resultsElement) {
+          resultsElement.textContent = "Results: " + count + " found";
+        }
+      }
+
+      // Event listeners
+      if (searchInput) {
+        searchInput.addEventListener("keyup", applyFilters);
+      }
+
+      const filterTypeSelect = document.getElementById("filter-type");
+      if (filterTypeSelect) {
+        filterTypeSelect.addEventListener("change", applyFilters);
+      }
+
+      if (dateFromInput) {
+        dateFromInput.addEventListener("change", applyFilters);
+      }
+
+      if (dateToInput) {
+        dateToInput.addEventListener("change", applyFilters);
+      }
+
+      if (clearButton) {
+        clearButton.addEventListener("click", function() {
+          if (searchInput) searchInput.value = "";
+          if (filterTypeSelect) filterTypeSelect.value = "all";
+          if (dateFromInput) dateFromInput.value = "";
+          if (dateToInput) dateToInput.value = "";
+          updateResultsCount(0);
+          applyFilters();
+        });
+      }
+
+      // Initialize results count
+      applyFilters();
     });
 

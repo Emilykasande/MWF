@@ -1,13 +1,15 @@
 extends layout
 
 block content
-  .container.mt-4
+  .container.mt-4(style="margin-left: 40px; margin-right: 40px;")
     .row.justify-content-center
-      .col-md-8
-        .card
-          .card-header.bg-primary.text-white
-            h3.mb-0 Edit Staff Member
-          .card-body
+      .col-md-8.col-lg-6.col-xl-5
+        .card.shadow-lg
+          .card-header.bg-primary.text-white.d-flex.align-items-center
+            h3.mb-0
+              i.fas.fa-user-edit.me-2
+              | Edit Staff Member
+          .card-body.bg-light
             if error
               .alert.alert-danger= error
             form(action=`/staff/edit/${staff._id}`, method="POST")
@@ -97,6 +99,10 @@ block content
                   placeholder="Enter next of kin phone number"
                 )
 
-              .d-flex.gap-2
-                button.btn.btn-primary(type="submit") Save Changes
-                a.btn.btn-secondary(href="/stafflist") Cancel
+              .d-flex.gap-2.justify-content-end.pt-3.border-top
+                button.btn.btn-primary(type="submit")
+                  i.fas.fa-save.me-2
+                  | Save Changes
+                a.btn.btn-secondary(href="/stafflist")
+                  i.fas.fa-times.me-2
+                  | Cancel

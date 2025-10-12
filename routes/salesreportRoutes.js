@@ -6,34 +6,47 @@ const SalesModel = require("../models/SalesModel");
 
 router.get("/salesreport", async (req, res) => {
   try {
-    const { product, date } = req.query;
+    const { product, startDate, endDate } = req.query;
     let match = {};
 
     if (product) {
       match.product = { $regex: product, $options: "i" };
     }
 
-    if (date) {
-      const start = new Date(date);
-      const end = new Date(date);
-      end.setDate(end.getDate() + 1);
-      match.date = { $gte: start, $lt: end };
+    if (startDate || endDate) {
+      match.date = {};
+      if (startDate) {
+        match.date.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        match.date.$lte = new Date(endDate);
+      }
     }
 
-    const sales = await SalesModel.aggregate([
-      { $match: match },
-      {
-        $group: {
-          _id: "$product",
-          totalQuantity: { $sum: "$quantity" },
-          totalSales: { $sum: { $multiply: ["$price", "$quantity"] } },
-          sales: { $push: "$$ROOT" },
-        },
-      },
-      { $sort: { _id: 1 } }, // optional: sort by product name
-    ]);
+    // Get individual sales records with populated sales agent info
+    const sales = await SalesModel.find(match)
+      .populate("salesAgent", "fullname")
+      .sort({ date: -1 }) // Most recent first
+      .lean();
 
-    res.render("salesreport", { sales, user: req.user, query: req.query });
+    // Calculate summary statistics
+    const summary = {
+      totalSales: sales.reduce((sum, sale) => sum + (sale.totalprice || 0), 0),
+      totalQuantity: sales.reduce((sum, sale) => sum + (sale.quantity || 0), 0),
+      uniqueProducts: [...new Set(sales.map(sale => sale.product))].length,
+      totalTransactions: sales.length,
+      dateRange: {
+        earliest: sales.length > 0 ? sales[sales.length - 1].date : null,
+        latest: sales.length > 0 ? sales[0].date : null
+      }
+    };
+
+    res.render("salesreport", {
+      sales,
+      summary,
+      user: req.user,
+      query: req.query
+    });
   } catch (err) {
     console.error("Sales report error:", err);
     res.status(500).send("Error loading sales report");

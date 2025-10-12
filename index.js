@@ -108,12 +108,12 @@ app.use("/", salesRoutes);
 app.use("/", addsaleRoutes);
 app.use("/", indexRoutes);
 app.use("/", staffRoutes);
-app.use("/", suppliersRoutes);
 app.use("/", dashboardRoutes);
 app.use("/", productsRoutes);
 app.use("/", stockreportRoutes);
 app.use("/", salesreportRoutes);
 app.use("/", agentstockRoutes);
+app.use("/", suppliersRoutes); // Move suppliers routes last to avoid conflicts
 
 // Root route - redirect to index page
 app.get("/", (req, res) => {

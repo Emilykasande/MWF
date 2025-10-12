@@ -26,12 +26,12 @@ html(lang="en")
         if user
           a.btn-logout(href="#" onclick="showLogoutConfirmation()") Logout
 
-    h2 📊 Products Report
+    h2(style="margin: 20px 40px 10px 40px;") 📊 Products Report
 
     // ======================
     // Search Bar (Right Corner)
     // ======================
-    .search-container(style="display:flex; justify-content:flex-end; margin-bottom:20px;")
+    .search-container(style="display:flex; justify-content:flex-end; margin: 20px 40px;")
       form(action="/stockreport" method="GET")
         input#stockreport-search(
           type="text", 
@@ -45,7 +45,8 @@ html(lang="en")
     // ======================
     // Add / Update Form (Wood)
     // ======================
-    form(action=editItem ? `/updatestock/${editItem._id}` : "/stockreport" method="post")
+    h2(style="margin: 20px 40px 10px 40px;") 🪵 Wood Stock
+    form(action=editItem ? `/updatestock/${editItem._id}` : "/stockreport" method="post" style="margin: 0 40px;")
       select(name="product" required)
         option(value="") Select Wood Type
         option(value="Oak" selected=editItem && editItem.product=="Oak") Oak
@@ -64,39 +65,40 @@ html(lang="en")
     // ======================
     // Wood Stock Report
     // ======================
-    h3 🪵 Wood Stock Report
-    table#woodReport
-      thead
-        tr
-          th Wood Type
-          th Quantity
-          th Price
-          th Status
-          th Supplier
-          th Supplier Contact
-          th Date
-          th Actions
-      tbody
-        each item in items
-          if item.category == "wood"
-            tr
-              td= item.product
-              td= item.quantity
-              td ugx#{item.price}
-              td= item.status
-              td= item.supplier
-              td= item.supplierContact || ""
-              td= item.date ? item.date.toDateString() : ""
-              td
-                form(method="get", action=`/updatestock/${item._id}`, style="display:inline")
-                  button.btn.btn-info(type="submit") Edit
-                button.btn.btn-danger(type="button", onclick=`showDeleteConfirmation('${item._id}', '${item.product}', 'wood stock item')`, style="margin-left:5px;") Delete
+    .table-container(style="margin: 20px 40px; overflow-x: auto;")
+      h3 🪵 Wood Stock Report
+      table#woodReport
+        thead
+          tr
+            th Wood Type
+            th Quantity
+            th Price
+            th Status
+            th Supplier
+            th Supplier Contact
+            th Date
+            th Actions
+        tbody
+          each item in items
+            if item.category == "wood"
+              tr
+                td= item.product
+                td= item.quantity
+                td ugx#{item.price}
+                td= item.status
+                td= item.supplier
+                td= item.supplierContact || ""
+                td= item.date ? item.date.toDateString() : ""
+                td
+                  form(method="get", action=`/updatestock/${item._id}`, style="display:inline")
+                    button.btn.btn-info(type="submit") Edit
+                  button.btn.btn-danger(type="button", onclick=`showDeleteConfirmation('${item._id}', '${item.product}', 'wood stock item')`, style="margin-left:5px;") Delete
 
     // ======================
     // Add / Update Form (Furniture)
     // ======================
-    h2 🛋️ Finished Furniture
-    form(action=editItem ? `/updatestock/${editItem._id}` : "/stockreport" method="post")
+    h2(style="margin: 20px 40px 10px 40px;") 🛋️ Finished Furniture
+    form(action=editItem ? `/updatestock/${editItem._id}` : "/stockreport" method="post" style="margin: 0 40px;")
       select(name="product" required)
         option(value="") Select Furniture Type
         option(value="Chair" selected=editItem && editItem.product=="Chair") Chair
@@ -113,36 +115,41 @@ html(lang="en")
       button(type="submit") #{editItem ? "Update Furniture" : "Add Furniture"}
 
     // Furniture Stock Report
-    h3 🛋️ Furniture Stock Report
-    table#furnitureReport
-      thead
-        tr
-          th Product
-          th Quantity
-          th Price
-          th Status
-          th Supplier
-          th Supplier Contact
-          th Date
-          th Actions
-      tbody
-        each item in items
-          if item.category == "furniture"
-            tr
-              td= item.product
-              td= item.quantity
-              td ugx#{item.price}
-              td= item.status
-              td= item.supplier
-              td= item.supplierContact || ""
-              td= item.date ? item.date.toDateString() : ""
-              td
-                form(method="get", action=`/updatestock/${item._id}`, style="display:inline")
-                  button.btn.btn-info(type="submit") Edit
-                button.btn.btn-danger(type="button", onclick=`showDeleteConfirmation('${item._id}', '${item.product}', 'furniture stock item')`, style="margin-left:5px;") Delete
+    .table-container(style="margin: 20px 40px; overflow-x: auto;")
+      h3 🛋️ Furniture Stock Report
+      table#furnitureReport
+        thead
+          tr
+            th Product
+            th Quantity
+            th Price
+            th Status
+            th Supplier
+            th Supplier Contact
+            th Date
+            th Actions
+        tbody
+          each item in items
+            if item.category == "furniture"
+              tr
+                td= item.product
+                td= item.quantity
+                td ugx#{item.price}
+                td= item.status
+                td= item.supplier
+                td= item.supplierContact || ""
+                td= item.date ? item.date.toDateString() : ""
+                td
+                  form(method="get", action=`/updatestock/${item._id}`, style="display:inline")
+                    button.btn.btn-info(type="submit") Edit
+                  button.btn.btn-danger(type="button", onclick=`showDeleteConfirmation('${item._id}', '${item.product}', 'furniture stock item')`, style="margin-left:5px;") Delete
 
     // Page script
     script(src="/Javascript/stockreport.js")
+
+    // Footer
+    footer#footer(style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #5d4037; padding: 10px 0; text-align: center; border-top: 1px solid #dee2e6; margin-top: 20px;")
+      p(style="margin: 0; color: #ffffff; font-size: 14px;") © 2024 Mayondo Wood And Furniture. All rights reserved.
 
     // Delete Confirmation Modal
     #deleteModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")

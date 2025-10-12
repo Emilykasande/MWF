@@ -20,21 +20,21 @@ html(lang="en")
           a(href="/analytic") Reports ▼
           .dropdown-content
             a(href="/accounting") Accounting
-            a(href="/stafflist") Staff
+            a(href="/dashboard") Manager
             a(href="/suppliers") Suppliers
         a(href="/stockreport") Stock
         if user
           a.btn-logout(href="/logout") Logout
 
     // Main Content
-    main.container
+    main.container(style="padding-bottom: 100px; min-height: calc(100vh - 200px);")
       .card
         h2 Sales Report
 
         if user && user.position === "manager"
           .d-flex(style="display:flex; justify-content:flex-end; margin-bottom:15px;")
             form(method="get", action="/salesreport")
-              button.btn.btn-success(type="submit") 📑 Generate Sales Report
+              button.btn.btn-success(type="submit") 📑Go to Sales Report
 
         table#salesTable
           thead
@@ -73,6 +73,10 @@ html(lang="en")
 
     // Script
     script(src="/Javascript/search.js")
+
+    // Footer
+    footer#footer(style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #5d4037; padding: 10px 0; text-align: center; border-top: 1px solid #dee2e6; margin-top: 20px; z-index: 1000; box-shadow: 0 -2px 4px rgba(0,0,0,0.1);")
+      p(style="margin: 0; color: #ffffff; font-size: 14px;") © 2024 Mayondo Wood And Furniture. All rights reserved.
 
     // Delete Confirmation Card
     #deleteModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")

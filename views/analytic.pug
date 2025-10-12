@@ -14,7 +14,7 @@ html(lang="en")
           img(src="/Images/mayondo logo.png", alt="Company Logo")
         h2 Mayondo Wood And Furniture
       nav.nav-links
-        a(href="/sales") Sales
+        a(href="/saleslist") Sales
         a(href="/stafflist") Register
         .dropdown
           a(href="/analytic") Reports ▼
@@ -23,8 +23,7 @@ html(lang="en")
             a(href="/dashboard") Manager
             a(href="/suppliers") Suppliers
         a(href="/stockreport") Stock
-        if user
-          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
+        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout" style="background-color: red; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; display: inline-block;") Logout
 
     // Logout Confirmation Modal
     #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
@@ -59,9 +58,10 @@ html(lang="en")
         }
       }
 
-    h1 Analytics Dashboard
+    .page-header(style="margin: 40px 0 30px 40px;")
+      h1(style="margin: 0; font-size: 24px; color: #333;") Analytics Dashboard
 
-    .grid
+    .grid(style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; width: calc(100% - 80px); margin-left: 40px; margin-right: 40px;")
       .card
         h2 Sales Trends
         canvas#salesChart

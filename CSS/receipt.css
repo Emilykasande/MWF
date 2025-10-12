@@ -3,6 +3,29 @@ body {
     background-color: #f7f7f7;
     margin: 0;
     padding: 20px;
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.back-button a {
+    display: inline-block;
+    padding: 10px 15px;
+    background: burlywood;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.back-button a:hover {
+    background: #0b5ed7;
 }
 
 .receipt {
@@ -87,4 +110,13 @@ body {
 
 .btn-print:hover {
     background: #0b5ed7;
+}
+
+.back-link {
+  color: #795548; /* brown tone */
+  font-weight: 600;
+  text-decoration: none;
+}
+.back-link:hover {
+  text-decoration: underline;
 }

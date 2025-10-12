@@ -15,7 +15,8 @@ html(lang="en")
           img(src="/Images/mayondo logo.png", alt="Company Logo")
           h2 Mayondo Furniture & Wood
         .search-container
-          input(type="text", placeholder="Search products...")
+          input#productSearch(type="text", placeholder="🔍 Search products...")
+          button#clearSearch(type="button", style="margin-left: 10px; padding: 8px 15px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;") Clear
 
     // =========================
     // Staff Navigation Bar
@@ -225,6 +226,53 @@ html(lang="en")
           if (event.target === modal) modal.style.display = 'none';
         });
       }
+
+      // Product Search Functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('productSearch');
+        const clearButton = document.getElementById('clearSearch');
+        const productCards = document.querySelectorAll('#productGrid .card');
+
+        // Search function
+        function searchProducts(query) {
+          let visibleCount = 0;
+
+          productCards.forEach(card => {
+            const title = card.querySelector('.title').textContent.toLowerCase();
+            const shouldShow = query === '' || title.includes(query.toLowerCase());
+
+            if (shouldShow) {
+              card.style.display = 'block';
+              visibleCount++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          // Show/hide "no products" message
+          const noProductsMsg = document.querySelector('.no-products');
+          if (noProductsMsg) {
+            noProductsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+          }
+        }
+
+        // Search input event listener
+        if (searchInput) {
+          searchInput.addEventListener('input', function(e) {
+            searchProducts(e.target.value);
+          });
+        }
+
+        // Clear button event listener
+        if (clearButton) {
+          clearButton.addEventListener('click', function() {
+            if (searchInput) {
+              searchInput.value = '';
+              searchProducts('');
+            }
+          });
+        }
+      });
 
     // =========================
     // Footer

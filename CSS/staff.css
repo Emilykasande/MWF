@@ -147,23 +147,33 @@ button:hover, a.button:hover {
 }
 
 /* Actions Buttons */
-td form button, td a {
-  font-size: 13px;
-  padding: 6px 12px;
+td form button,
+td a {
+  font-size: 12px;
+  padding: 4px 8px;
   border: none;
   border-radius: 4px;
   color: white;
+  margin-right: 6px; 
+  display: inline-block; 
+  white-space: nowrap;
 }
 
 td a {
   background-color: burlywood;
   text-decoration: none;
-  margin-right: 5px;
 }
 
 td button {
   background-color: red;
 }
+
+/* optional: remove last margin to keep table neat */
+td form button:last-child,
+td a:last-child {
+  margin-right: 0;
+}
+
 
 
 @media (max-width: 1024px) {
@@ -194,7 +204,7 @@ td button {
 footer {
             flex-shrink: 0;
             background:#5d4037;
-            color: #fff;
+            /* color: #fff; */
             padding: 20px;
             text-align: center;
         }
