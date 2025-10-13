@@ -14,7 +14,10 @@ html(lang="en")
           img(src="/Images/mayondo logo.png", alt="Company Logo")
         h2 Mayondo Wood And Furniture
       nav.nav-links
-        a(href="/saleslist") Sales
+        .dropdown
+          a(href="/saleslist") Sales  ▼
+          .dropdown-content
+            a(href="/managersales") online Sales
         a(href="/stafflist") Staff
         .dropdown
           a(href="/analytic") Reports ▼

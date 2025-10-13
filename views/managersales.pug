@@ -1,0 +1,324 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Manager Sales - Mayondo Wood And Furniture
+    link(rel="stylesheet", href="/CSS/orders.css")
+
+  body
+  body
+    // Navbar
+    header.navbar
+      .brand
+        a(href="/")
+          img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+      nav.nav-links
+        .dropdown
+          a(href="/saleslist") Sales  ▼
+          .dropdown-content
+            a(href="/managersales") online Sales
+        a(href="/stafflist") Staff
+        .dropdown
+          a(href="/analytic") Reports ▼
+          .dropdown-content
+            a(href="/accounting") Accounting
+            a(href="/dashboard") Manager
+            a(href="/suppliers") Suppliers
+        a(href="/stockreport") Stock
+        if user
+          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout" style="background-color: red; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; display: inline-block;") Logout
+
+
+    main
+      h2 Online Sales List
+      
+      // Search and Filter Section
+      .search-filter-section
+        .search-box
+          input#productSearch(type="text", placeholder="Search by product...")
+        .filter-box
+          select#productFilter
+            option(value="") All Products
+          select#agentFilter
+            option(value="") All Agents
+          input#dateFrom(type="date")
+          input#dateTo(type="date")
+        .filter-actions
+          button.btn.btn-secondary(onclick="applyFilters()") Apply Filters
+          button.btn.btn-outline(onclick="clearFilters()") Clear
+      
+      button.btn.btn-primary(onclick="generatePDF()") Generate PDF Report
+      table
+        thead
+          tr
+            th Customer
+            th Product
+            th Quantity
+            th Price
+            th Total Price
+            th Sales Agent
+            th Date
+            th Actions
+        tbody
+          if sales && sales.length
+            each sale in sales
+              tr
+                td= sale.customername
+                td= sale.product
+                td= sale.quantity
+                td UGX #{sale.price}
+                td UGX #{sale.totalprice}
+                td= sale.salesAgent ? sale.salesAgent.username || 'N/A' : 'N/A'
+                td= new Date(sale.date).toLocaleString()
+                td
+                  button.btn.btn-danger.btn-sm(onclick=`deleteSale('${sale._id}')`) Delete
+          else
+            tr
+              td(colspan="8") No sales found.
+
+    // Footer
+    footer.footer(style="position: fixed; bottom: 0; left: 0; right: 0; background-color: :#5d4037; padding: 10px; text-align: center; border-top: 1px solid #ddd;")
+      .footer-content
+        p © 2025 Mayondo Wood And Furniture. All rights reserved.
+
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+    // Report Preview Modal
+    #reportModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 5% auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 1200px; max-height: 80vh; overflow-y: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;")
+          h3(style="margin: 0; color: #5d4037;") Sales Report Preview
+          button.btn.btn-danger(type="button", onclick="closeReportModal()", style="border: none; background: none; font-size: 24px; cursor: pointer;") &times;
+        .modal-body(style="margin-bottom: 20px;")
+          .report-filters-applied(style="margin-bottom: 15px; font-size: 14px; color: #666;")
+            span Current filters: <span id="appliedFilters">None</span>
+          .report-content
+            table#previewTable
+              thead
+                tr
+                  th Customer
+                  th Product
+                  th Quantity
+                  th Price
+                  th Total Price
+                  th Sales Agent
+                  th Date
+              tbody#previewTableBody
+                tr
+                  td(colspan="7") Loading preview...
+        .modal-footer(style="text-align: right; border-top: 1px solid #ddd; padding-top: 15px;")
+          button.btn.btn-secondary(type="button", onclick="closeReportModal()") Close
+          button.btn.btn-primary(type="button", onclick="downloadReport()", style="margin-left: 10px;") Download PDF
+
+    script.
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        window.location.href = '/logout';
+      }
+
+      function deleteSale(saleId) {
+        if (confirm('Are you sure you want to delete this sale?')) {
+          fetch(`/sales/${saleId}`, {
+            method: 'DELETE'
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert('Error deleting sale: ' + data.message);
+            }
+          })
+          .catch(err => {
+            console.error('Error:', err);
+            alert('An error occurred while deleting the sale.');
+          });
+        }
+      }
+
+      function generatePDF() {
+        showReportModal();
+      }
+
+      function showReportModal() {
+        const modal = document.getElementById('reportModal');
+        if (modal) {
+          modal.style.display = 'block';
+          loadReportPreview();
+        }
+      }
+
+      function closeReportModal() {
+        document.getElementById('reportModal').style.display = 'none';
+      }
+
+      function downloadReport() {
+        // Get current filters
+        const filters = getCurrentFilters();
+        const queryParams = new URLSearchParams(filters).toString();
+        window.open(`/managersales/pdf?${queryParams}`, '_blank');
+      }
+
+      function loadReportPreview() {
+        const filters = getCurrentFilters();
+        const queryParams = new URLSearchParams(filters).toString();
+
+        fetch(`/managersales/preview?${queryParams}`)
+          .then(response => response.json())
+          .then(data => {
+            updatePreviewTable(data.sales);
+            updateAppliedFiltersDisplay(filters);
+          })
+          .catch(err => {
+            console.error('Error loading preview:', err);
+            document.getElementById('previewTableBody').innerHTML = '<tr><td colspan="7">Error loading preview</td></tr>';
+          });
+      }
+
+      function updatePreviewTable(sales) {
+        const tbody = document.getElementById('previewTableBody');
+        if (!sales || sales.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7">No sales found with current filters</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = sales.map(sale => `
+          <tr>
+            <td>${sale.customername}</td>
+            <td>${sale.product}</td>
+            <td>${sale.quantity}</td>
+            <td>UGX ${sale.price}</td>
+            <td>UGX ${sale.totalprice}</td>
+            <td>${sale.salesAgent ? sale.salesAgent.username || 'N/A' : 'N/A'}</td>
+            <td>${new Date(sale.date).toLocaleString()}</td>
+          </tr>
+        `).join('');
+      }
+
+      function getCurrentFilters() {
+        return {
+          search: document.getElementById('productSearch').value,
+          productFilter: document.getElementById('productFilter').value,
+          agentFilter: document.getElementById('agentFilter').value,
+          dateFrom: document.getElementById('dateFrom').value,
+          dateTo: document.getElementById('dateTo').value
+        };
+      }
+
+      function updateAppliedFiltersDisplay(filters) {
+        const appliedFiltersSpan = document.getElementById('appliedFilters');
+        const activeFilters = [];
+
+        if (filters.search) activeFilters.push(`Search: "${filters.search}"`);
+        if (filters.productFilter) activeFilters.push(`Product: ${filters.productFilter}`);
+        if (filters.agentFilter) activeFilters.push(`Agent: ${filters.agentFilter}`);
+        if (filters.dateFrom) activeFilters.push(`From: ${filters.dateFrom}`);
+        if (filters.dateTo) activeFilters.push(`To: ${filters.dateTo}`);
+
+        appliedFiltersSpan.textContent = activeFilters.length > 0 ? activeFilters.join(', ') : 'None';
+      }
+
+      function applyFilters() {
+        filterTable();
+      }
+
+      function clearFilters() {
+        document.getElementById('productSearch').value = '';
+        document.getElementById('productFilter').value = '';
+        document.getElementById('agentFilter').value = '';
+        document.getElementById('dateFrom').value = '';
+        document.getElementById('dateTo').value = '';
+        filterTable();
+      }
+
+      function filterTable() {
+        const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+        const productFilter = document.getElementById('productFilter').value.toLowerCase();
+        const agentFilter = document.getElementById('agentFilter').value.toLowerCase();
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+          if (row.cells.length < 8) return; // Skip "No sales found" row
+
+          const product = row.cells[1].textContent.toLowerCase();
+          const agent = row.cells[5].textContent.toLowerCase();
+          const date = new Date(row.cells[6].textContent);
+
+          let showRow = true;
+
+          if (searchTerm && !product.includes(searchTerm)) showRow = false;
+          if (productFilter && product !== productFilter) showRow = false;
+          if (agentFilter && agent !== agentFilter && !(agentFilter === 'n/a' && agent === 'n/a')) showRow = false;
+          if (dateFrom && date < new Date(dateFrom)) showRow = false;
+          if (dateTo && date > new Date(dateTo)) showRow = false;
+
+          row.style.display = showRow ? '' : 'none';
+        });
+      }
+
+      function populateFilters() {
+        const productFilter = document.getElementById('productFilter');
+        const agentFilter = document.getElementById('agentFilter');
+        const products = new Set();
+        const agents = new Set();
+
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+          if (row.cells.length >= 2) {
+            products.add(row.cells[1].textContent);
+            if (row.cells.length >= 6) {
+              agents.add(row.cells[5].textContent);
+            }
+          }
+        });
+
+        // Populate product filter
+        products.forEach(product => {
+          if (product) {
+            const option = document.createElement('option');
+            option.value = product;
+            option.textContent = product;
+            productFilter.appendChild(option);
+          }
+        });
+
+        // Populate agent filter
+        agents.forEach(agent => {
+          if (agent && agent !== 'N/A') {
+            const option = document.createElement('option');
+            option.value = agent;
+            option.textContent = agent;
+            agentFilter.appendChild(option);
+          }
+        });
+      }
+
+      // Initialize filters on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        populateFilters();
+
+        // Add search functionality
+        document.getElementById('productSearch').addEventListener('input', filterTable);
+
+        // Add modal close functionality
+        document.getElementById('reportModal').addEventListener('click', function(event) {
+          if (event.target === this) {
+            closeReportModal();
+          }
+        });
+      });

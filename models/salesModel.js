@@ -10,10 +10,10 @@ const salesSchema = new mongoose.Schema({
   salesAgent: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserModel",
-    required: true,
   },
   paymentMethod: String,
   date: Date,
+  isFromClearedOrder: { type: Boolean, default: false }, // Flag to distinguish cleared orders
 });
 
 // Prevent OverwriteModelError
