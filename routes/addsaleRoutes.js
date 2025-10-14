@@ -3,12 +3,39 @@ const router = express.Router();
 const SalesModel = require("../models/salesModel");
 const StockModel = require("../models/stockModel");
 
+// Import stock helpers from stockRoutes
+const stockRoutes = require("./stockRoutes");
+const { reduceStock } = stockRoutes;
+
 
 // API route to fetch products for dropdown
 router.get("/api/products", async (req, res) => {
   try {
-    const products = await StockModel.find({}).select('product quantity').lean();
-    console.log("API Fetched products:", products); // Debug log
+    // Aggregate products by name and sum quantities
+    const products = await StockModel.aggregate([
+      {
+        $group: {
+          _id: "$product",
+          totalQuantity: { $sum: "$quantity" },
+          category: { $first: "$category" },
+          price: { $first: "$price" }
+        }
+      },
+      {
+        $project: {
+          product: "$_id",
+          quantity: "$totalQuantity",
+          category: 1,
+          price: 1,
+          _id: 0
+        }
+      },
+      {
+        $sort: { product: 1 }
+      }
+    ]);
+
+    console.log("API Aggregated products:", products); // Debug log
     res.json(products);
   } catch (err) {
     console.error("Error fetching products:", err.message);
@@ -19,8 +46,31 @@ router.get("/api/products", async (req, res) => {
 // GET /addsale
 router.get("/addsale", async (req, res) => {
   try {
-    const products = await StockModel.find({}).lean(); // fetch all products
-    console.log("Fetched products:", products); // debug log
+    // Aggregate products for dropdown
+    const products = await StockModel.aggregate([
+      {
+        $group: {
+          _id: "$product",
+          totalQuantity: { $sum: "$quantity" },
+          category: { $first: "$category" },
+          price: { $first: "$price" }
+        }
+      },
+      {
+        $project: {
+          product: "$_id",
+          quantity: "$totalQuantity",
+          category: 1,
+          price: 1,
+          _id: 0
+        }
+      },
+      {
+        $sort: { product: 1 }
+      }
+    ]);
+
+    console.log("Fetched aggregated products:", products); // debug log
 
     const sales = await SalesModel.find({
       salesAgent: req.session.user?.id || req.session.user?._id,
@@ -72,18 +122,8 @@ router.post("/addsale", async (req, res) => {
     let totalprice = qty * unitPrice;
     if (transport === "yes") totalprice += totalprice * 0.05;
 
-    // Check stock
-    const stockItem = await StockModel.findOne({ product });
-    if (!stockItem || (Number(stockItem.quantity) || 0) < qty) {
-      throw new Error("Not enough stock available");
-    }
-
-    // Deduct stock
-    await StockModel.findByIdAndUpdate(
-      stockItem._id,
-      { quantity: (Number(stockItem.quantity) || 0) - qty },
-      { runValidators: false }
-    );
+    // Check and reduce stock using helper function
+    const newStockQty = await reduceStock(product, qty);
 
     // Save sale
     const newSale = await SalesModel.create({
@@ -98,11 +138,35 @@ router.post("/addsale", async (req, res) => {
       date: date ? new Date(date) : new Date(),
     });
 
-    // Fetch updated sales
+    // Fetch updated sales and aggregated products
     const sales = await SalesModel.find({ salesAgent: req.session.user?.id || req.session.user?._id })
       .populate("salesAgent", "fullname")
       .sort({ date: -1 })
       .lean();
+
+    // Aggregate products for dropdown
+    const products = await StockModel.aggregate([
+      {
+        $group: {
+          _id: "$product",
+          totalQuantity: { $sum: "$quantity" },
+          category: { $first: "$category" },
+          price: { $first: "$price" }
+        }
+      },
+      {
+        $project: {
+          product: "$_id",
+          quantity: "$totalQuantity",
+          category: 1,
+          price: 1,
+          _id: 0
+        }
+      },
+      {
+        $sort: { product: 1 }
+      }
+    ]);
 
     sales.forEach((sale) => {
       sale.formattedDate = sale.date
@@ -114,7 +178,7 @@ router.post("/addsale", async (req, res) => {
       user: req.session.user,
       formData: {},
       sales,
-      products: await StockModel.find({}).lean(),
+      products,
       receipt: newSale,
     });
   } catch (err) {
@@ -125,7 +189,30 @@ router.post("/addsale", async (req, res) => {
       .populate("salesAgent", "fullname")
       .sort({ date: -1 })
       .lean();
-    const products = await StockModel.find({}).lean();
+
+    // Aggregate products for dropdown
+    const products = await StockModel.aggregate([
+      {
+        $group: {
+          _id: "$product",
+          totalQuantity: { $sum: "$quantity" },
+          category: { $first: "$category" },
+          price: { $first: "$price" }
+        }
+      },
+      {
+        $project: {
+          product: "$_id",
+          quantity: "$totalQuantity",
+          category: 1,
+          price: 1,
+          _id: 0
+        }
+      },
+      {
+        $sort: { product: 1 }
+      }
+    ]);
 
     sales.forEach((sale) => {
       sale.formattedDate = sale.date

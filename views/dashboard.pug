@@ -40,7 +40,33 @@ html(lang="en")
           button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
           button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
 
-    script.
+    style.
+      .notification {
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .notification.low-stock {
+        background-color: #fff3cd;
+        color: #856404;
+        border-left: 4px solid #ffc107;
+      }
+      .notification.order {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border-left: 4px solid #17a2b8;
+      }
+      .notification.delivery {
+        background-color: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+      }
+      .notification.top-seller {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+      }
       function showLogoutConfirmation() {
         document.getElementById('logoutModal').style.display = 'block';
       }

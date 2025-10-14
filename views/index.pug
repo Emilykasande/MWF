@@ -10,14 +10,16 @@ header.hero
     p
       i Home And Office Furniture Designs Made Easy
     .btn-group-custom
-      if !user
+      if user
         a.btn.btn-primary.btn-lg(href="/login") Team Portal
+        a.btn.btn-success.btn-lg(href="/ecommerce") Shop Now
+      else
         a.btn.btn-success.btn-lg(href="/ecommerce") Shop Now
 
 section.cards-container#info-cards
   .card(style="background-image: url('Images/livingroom.jpeg');")
     h2 About Us
-    p Our platform helps businesses streamline operations, connect with customers, and grow efficiently. Everything from CRM, sales tracking, inventory management, to accounting is handled in one place for modern business needs.
+    p Mayondo Wood and Furniture connects upcountry wood suppliers to the market by sourcing high-quality wood products and delivering them to furniture dealers, building, and construction companies. We bridge the gap between producers and buyers—ensuring reliable supply, superior quality, and sustainable products that power the furniture and construction industries.
   .card(style="background-image: url('Images/livingroom.jpeg');")
     h2 Contact Us
     p If you have questions or need support, please use the contact information in the footer below to reach out via Email, Phone, WhatsApp, or social media. Our team is ready to assist you!

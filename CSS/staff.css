@@ -1,4 +1,4 @@
-
+/* === GLOBAL === */
 body {
   display: flex;
   flex-direction: column;
@@ -23,12 +23,12 @@ body::before {
   z-index: -1;
 }
 
-
+/* === NAVBAR === */
 header.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color:  #8B4513;
+  background-color: #8B4513;
   color: white;
   padding: 10px 20px;
 }
@@ -51,12 +51,12 @@ header.navbar nav.nav-links a {
 }
 
 header.navbar nav.nav-links a.btn-logout {
-  background-color: #dc3545;
+  background-color: #dc3545; /* Bootstrap red */
   padding: 6px 12px;
   border-radius: 4px;
 }
 
-/* Dropdown */
+/* === DROPDOWN === */
 header.navbar .dropdown {
   position: relative;
   display: inline-block;
@@ -65,24 +65,28 @@ header.navbar .dropdown {
 header.navbar .dropdown-content {
   display: none;
   position: absolute;
-  background-color:black;
+  background-color: black;
   min-width: 150px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
 header.navbar .dropdown-content a {
-  color: #343a40;
+  color: white;
   padding: 8px 12px;
   display: block;
   text-decoration: none;
+}
+
+header.navbar .dropdown-content a:hover {
+  background-color: #333;
 }
 
 header.navbar .dropdown:hover .dropdown-content {
   display: block;
 }
 
-
+/* === TABLE HEADER === */
 .table-header {
   margin: 20px auto;
   width: 95%;
@@ -102,11 +106,19 @@ header.navbar .dropdown:hover .dropdown-content {
   background-color: brown;
   padding: 8px 16px;
   border-radius: 4px;
-  transition: background-color 0.3s ease;
+  transition: 0.3s ease;
 }
 
 .table-header a:hover {
-  background-color: brown;
+  background-color: #a0522d;
+}
+
+/* === TABLE === */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  padding-right: 30px;
+  box-sizing: border-box;
 }
 
 table {
@@ -137,6 +149,7 @@ tbody tr:hover {
   background-color: #f1f3f5;
 }
 
+/* === BUTTONS & ACTIONS === */
 button, a.button {
   cursor: pointer;
   transition: 0.2s;
@@ -146,7 +159,6 @@ button:hover, a.button:hover {
   opacity: 0.85;
 }
 
-/* Actions Buttons */
 td form button,
 td a {
   font-size: 12px;
@@ -154,8 +166,8 @@ td a {
   border: none;
   border-radius: 4px;
   color: white;
-  margin-right: 6px; 
-  display: inline-block; 
+  margin-right: 6px;
+  display: inline-block;
   white-space: nowrap;
 }
 
@@ -168,14 +180,73 @@ td button {
   background-color: red;
 }
 
-/* optional: remove last margin to keep table neat */
+/* Remove last margin to keep table neat */
 td form button:last-child,
 td a:last-child {
   margin-right: 0;
 }
 
+/* === FOOTER === */
+footer {
+  flex-shrink: 0;
+  background: #5d4037;
+  padding: 20px;
+  text-align: center;
+}
 
+.footer-links {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
+.footer-links a {
+  color: #ddd;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-bottom {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* === BRAND === */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+
+.brand h2 {
+  margin: 0;
+  font-size: 20px;
+  color: white;
+}
+
+/* === CUSTOM BUTTON COLOR === */
+.btn-brown {
+  background-color: #795548;
+  color: #fff;
+  border: none;
+}
+
+.btn-brown:hover {
+  background-color: #5d4037;
+  color: #fff;
+}
+
+/* === RESPONSIVE DESIGN === */
 @media (max-width: 1024px) {
   table, thead, tbody, th, td, tr {
     display: block;
@@ -201,59 +272,3 @@ td a:last-child {
     font-weight: bold;
   }
 }
-footer {
-            flex-shrink: 0;
-            background:#5d4037;
-            /* color: #fff; */
-            padding: 20px;
-            text-align: center;
-        }
-
-        .footer-links {
-            margin: 10px 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #ddd;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .footer-links a:hover {
-            color: #fff;
-        }
-
-        .footer-bottom {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #aaa;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-        }
-
-        .brand h2 {
-            margin: 0;
-            font-size: 20px;
-            color: white;
-        }
-        .btn-brown {
-            background-color: #795548;
-            color: #fff;
-            border: none;
-            }
-
-            .btn-brown:hover {
-            background-color: #5d4037; 
-            color: #fff;
-            }

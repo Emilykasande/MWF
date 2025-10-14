@@ -15,14 +15,17 @@ html(lang="en")
         h2 Mayondo Wood And Furniture
       nav.nav-links
         a(href="/saleslist") Sales
-        a(href="/stafflist") Register
+        a(href="/stafflist") Staff
         .dropdown
           a(href="/analytic") Reports ▼
           .dropdown-content
             a(href="/accounting") Accounting
             a(href="/dashboard") Manager
             a(href="/suppliers") Suppliers
-        a(href="/stockreport") Stock
+        .dropdown
+          a(href="/stockreport") Stock ▼
+          .dropdown-content
+            a(href="/stockreport/detailed") Detailed Stock
         if user
           a.btn-logout(href="#" onclick="showLogoutConfirmation()") Logout
 
@@ -58,7 +61,7 @@ html(lang="en")
       input(type="text", name="supplier", placeholder="Supplier", required, value=editItem ? editItem.supplier : "")
       input(type="text", name="supplierEmail", placeholder="Supplier Email", required, value=editItem ? editItem.supplierEmail : "")
       input(type="text", name="supplierContact", placeholder="Supplier Contact", value=editItem ? editItem.supplierContact : "")
-      input(type="date", name="date", required, value=editItem ? editItem.date : "")
+      input(type="date", name="date", required, value=editItem ? editItem.date : new Date().toISOString().split('T')[0])
       input(type="hidden", name="category", value="wood")
       button(type="submit") #{editItem ? "Update Wood" : "Add Wood"}
 
@@ -76,7 +79,6 @@ html(lang="en")
             th Status
             th Supplier
             th Supplier Contact
-            th Date
             th Actions
         tbody
           each item in items
@@ -88,7 +90,6 @@ html(lang="en")
                 td= item.status
                 td= item.supplier
                 td= item.supplierContact || ""
-                td= item.date ? item.date.toDateString() : ""
                 td
                   form(method="get", action=`/updatestock/${item._id}`, style="display:inline")
                     button.btn.btn-info(type="submit") Edit
@@ -110,7 +111,7 @@ html(lang="en")
       input(type="text", name="supplier", placeholder="Supplier", required, value=editItem ? editItem.supplier : "")
       input(type="text", name="supplierEmail", placeholder="Supplier Email", required, value=editItem ? editItem.supplierEmail : "")
       input(type="text", name="supplierContact", placeholder="Supplier Contact", value=editItem ? editItem.supplierContact : "")
-      input(type="date", name="date", required, value=editItem ? editItem.date : "")
+      input(type="date", name="date", required, value=editItem ? editItem.date : new Date().toISOString().split('T')[0])
       input(type="hidden", name="category", value="furniture")
       button(type="submit") #{editItem ? "Update Furniture" : "Add Furniture"}
 
@@ -126,7 +127,6 @@ html(lang="en")
             th Status
             th Supplier
             th Supplier Contact
-            th Date
             th Actions
         tbody
           each item in items
@@ -138,7 +138,6 @@ html(lang="en")
                 td= item.status
                 td= item.supplier
                 td= item.supplierContact || ""
-                td= item.date ? item.date.toDateString() : ""
                 td
                   form(method="get", action=`/updatestock/${item._id}`, style="display:inline")
                     button.btn.btn-info(type="submit") Edit
@@ -149,7 +148,7 @@ html(lang="en")
 
     // Footer
     footer#footer(style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #5d4037; padding: 10px 0; text-align: center; border-top: 1px solid #dee2e6; margin-top: 20px;")
-      p(style="margin: 0; color: #ffffff; font-size: 14px;") © 2024 Mayondo Wood And Furniture. All rights reserved.
+      p(style="margin: 0; color: #ffffff; font-size: 14px;") © 2025 Mayondo Wood And Furniture. All rights reserved.
 
     // Delete Confirmation Modal
     #deleteModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")

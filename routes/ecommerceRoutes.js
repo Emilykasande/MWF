@@ -107,7 +107,7 @@ router.get("/product/edit/:id", ensureAuthenticated, async (req, res) => {
   const product = await Product.findById(req.params.id).lean();
   if (!product) return res.status(404).send("Product not found");
 
-  res.render("editProduct", { product, user: req.session.user });
+  res.render("editproduct", { product, user: req.session.user });
 });
 
 router.post(

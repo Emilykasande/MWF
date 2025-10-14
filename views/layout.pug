@@ -2,29 +2,30 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title Orders
+link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css", rel="stylesheet")
 link(rel="stylesheet", href="/CSS/orders.css")
+link(href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css", rel="stylesheet")
 
 body
   // HEADER
-  header.navbar
-    .brand
-      a(href="index.html")
-        img(src="/Images/mayondo logo.png", alt="Company Logo")
-      h2 Mayondo Wood And Furniture
-    nav.nav-links
-      a(href="/saleslist") Sales
-      a(href="/stafflist") Staff
-      a(href="/analytic") Reports
-      // dropdown for accounting
-      .dropdown
-        .dropdown-content
-          a(href="/accounting") Accounting
-          a(href="/dashboard") Manager
-          a(href="/suppliers") Suppliers
-      a(href="/stockreport") Stock
+  header.navbar(style="background-color: #8B4513; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; width: 100%;")
+    .brand(style="display: flex; align-items: center;")
+      a(href="/")
+        img(src="/Images/mayondo logo.png", alt="Company Logo", style="height: 40px; margin-right: 15px;")
+      h2(style="color: white; margin: 0; font-size: 1.5rem;") Mayondo Wood And Furniture
+    nav.nav-links(style="display: flex; gap: 20px; align-items: center;")
+      a(href="/saleslist", style="color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background-color 0.3s;") Sales
+      a(href="/stafflist", style="color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background-color 0.3s;") Staff
+      .dropdown(style="position: relative;")
+        a(href="/analytic", style="color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background-color 0.3s;") Reports ▼
+        .dropdown-content(style="display: none; position: absolute; top: 100%; left: 0; background-color: white; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; border-radius: 4px;")
+          a(href="/accounting", style="color: black; padding: 12px 16px; text-decoration: none; display: block;") Accounting
+          a(href="/dashboard", style="color: black; padding: 12px 16px; text-decoration: none; display: block;") Manager
+          a(href="/suppliers", style="color: black; padding: 12px 16px; text-decoration: none; display: block;") Suppliers
+      a(href="/stockreport", style="color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background-color 0.3s;") Stock
       // replace search with Logout button
       if user
-        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
+        a(href="#" onclick="showLogoutConfirmation()" class="btn-logout" style="color: white; text-decoration: none; padding: 8px 16px; background-color: #dc3545; border-radius: 4px;") Logout
 
   // BODY CONTENT (this will change depending on the page)
   block content
@@ -44,26 +45,50 @@ body
   footer
    
     .footer-bottom
-      | © 2025 Mayondo wood and furniture. All rights reserved.
+      | {{ 2025 }} Mayondo wood and furniture. All rights reserved.
 
-  script.
-    function showLogoutConfirmation() {
-      document.getElementById('logoutModal').style.display = 'block';
-    }
-
-    function closeLogoutModal() {
-      document.getElementById('logoutModal').style.display = 'none';
-    }
-
-    function confirmLogout() {
-      // Redirect to logout route which will destroy session and redirect to index
-      window.location.href = '/logout';
-    }
-
-    // Close modal when clicking outside of it
-    window.onclick = function(event) {
-      const modal = document.getElementById('logoutModal');
-      if (event.target === modal) {
-        modal.style.display = 'none';
+    script.
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
       }
-    }
+
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        // Redirect to logout route which will destroy session and redirect to index
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      // Dropdown functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const dropdowns = document.querySelectorAll('.dropdown');
+
+        dropdowns.forEach(dropdown => {
+          const trigger = dropdown.querySelector('a');
+          const content = dropdown.querySelector('.dropdown-content');
+
+          if (trigger && content) {
+            trigger.addEventListener('click', function(e) {
+              e.preventDefault();
+              content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+              if (!dropdown.contains(e.target)) {
+                content.style.display = 'none';
+              }
+            });
+          }
+        });
+      });

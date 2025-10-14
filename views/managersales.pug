@@ -58,7 +58,6 @@ html(lang="en")
             th Quantity
             th Price
             th Total Price
-            th Sales Agent
             th Date
             th Actions
         tbody
@@ -70,7 +69,6 @@ html(lang="en")
                 td= sale.quantity
                 td UGX #{sale.price}
                 td UGX #{sale.totalprice}
-                td= sale.salesAgent ? sale.salesAgent.username || 'N/A' : 'N/A'
                 td= new Date(sale.date).toLocaleString()
                 td
                   button.btn.btn-danger.btn-sm(onclick=`deleteSale('${sale._id}')`) Delete

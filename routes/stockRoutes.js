@@ -82,8 +82,8 @@ router.get("/admin/upload", async (req, res) => {
   }
 });
 
-// GET all stock and render the table
-router.get("/stock", async (req, res) => {
+// GET detailed stock report (individual entries, no aggregation)
+router.get("/stockreport/detailed", async (req, res) => {
   try {
     const query = req.query.q ? req.query.q.trim() : "";
 
@@ -92,17 +92,17 @@ router.get("/stock", async (req, res) => {
     if (query) {
       filter = {
         $or: [
-          { product: { $regex: query, $options: "i" } }, // search product name
-          { supplier: { $regex: query, $options: "i" } }, // search supplier
-          { status: { $regex: query, $options: "i" } }, // search status
+          { product: { $regex: query, $options: "i" } },
+          { supplier: { $regex: query, $options: "i" } },
+          { status: { $regex: query, $options: "i" } },
         ],
       };
     }
 
     const items = await StockModel.find(filter).sort({ date: -1 }).lean();
-    res.render("stockreport", { items, editItem: null, query });
+    res.render("detailedstockreport", { items, editItem: null, query });
   } catch (error) {
-    console.error("Error fetching stock:", error.message);
+    console.error("Error fetching detailed stock:", error.message);
     res.status(400).send("Unable to get data from the database!");
   }
 });
@@ -126,7 +126,7 @@ router.post("/stock", async (req, res) => {
     }
 
     const qtyToAdd = Number(quantity) || 0;
-    const dateObj = date ? new Date(date) : new Date();
+    const dateObj = new Date(); // Always use current date for new stock
 
     await increaseStock(product, category, qtyToAdd, {
       price: price !== undefined ? Number(price) : undefined,
@@ -198,7 +198,7 @@ router.post("/updatestock/:id", async (req, res) => {
 
     const qty = Number(quantity) || 0;
     const unitPrice = Number(price) || 0;
-    const dateObj = date ? new Date(date) : new Date();
+    const dateObj = new Date(); // Always use current date for updates
 
     await StockModel.findByIdAndUpdate(
       req.params.id,

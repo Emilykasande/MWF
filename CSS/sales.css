@@ -238,7 +238,7 @@
       }
 
       th {
-        background: #3498db;
+        background: black;
         color: white;
       }
 
@@ -268,7 +268,7 @@
       .btn {
         display: inline-block;
         padding: 5px 10px;
-        background-color: #4CAF50;
+        background-color: brown;
         color: white;
         text-decoration: none;
         border-radius: 4px;

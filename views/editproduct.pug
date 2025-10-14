@@ -1,19 +1,92 @@
-extends layout
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title My Sales
+    link(rel="stylesheet", href="/CSS/addsale.css")
 
-block content
-  h1 Edit Product
+  body
+    //- Navbar
+    header.navbar
+      .brand
+        a(href="index.html")
+          img(src="/Images/mayondo logo.png", alt="Company Logo")
+        h2 Mayondo Wood And Furniture
+      nav.nav-links
+        a(href="/admin/upload") Storeupdate
+        a(href="/orders") Orders
+        a(href="/addsale") Sales
+        a(href="/ecommerce") Store
+        if user
+          a(href="#" onclick="showLogoutConfirmation()" class="btn-logout") Logout
 
-  form(action=`/ecommerce/product/edit/${product._id}` method="POST" enctype="multipart/form-data")
-    .form-group
-      label(for="name") Product Name
-      input#name(type="text" name="name" value=product.name required)
+    // Logout Confirmation Modal
+    #logoutModal.modal(style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);")
+      .modal-content(style="background-color: white; margin: 15% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);")
+        .modal-header(style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;")
+          h3(style="margin: 0; color: #d9534f;") Confirm Logout
+        .modal-body(style="margin-bottom: 20px;")
+          p#logoutMessage(style="margin: 0;") Are you sure you want to log out?
+        .modal-footer(style="text-align: right;")
+          button.btn.btn-danger(type="button", onclick="confirmLogout()") Logout
+          button.btn.btn-secondary(type="button", onclick="closeLogoutModal()", style="margin-left: 10px;") Cancel
 
-    .form-group
-      label(for="price") Price
-      input#price(type="number" name="price" value=product.price required)
+    script.
+      // Load products for the dropdown
+      fetch('/api/products')
+        .then(response => response.json())
+        .then(products => {
+          const productSelect = document.getElementById('product');
+          products.forEach(prod => {
+            const option = document.createElement('option');
+            option.value = prod.product;
+            option.textContent = `${prod.product} (Stock: ${prod.quantity})`;
+            productSelect.appendChild(option);
+          });
+        })
+        .catch(err => {
+          console.error('Error loading products:', err);
+        });
 
-    .form-group
-      label(for="image") Product Image
-      input#image(type="file" name="image" accept="image/*")
+      function showLogoutConfirmation() {
+        document.getElementById('logoutModal').style.display = 'block';
+      }
 
-    button(type="submit") Update Product
+      function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+      }
+
+      function confirmLogout() {
+        window.location.href = '/logout';
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('logoutModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+  .container.mt-5(style="display: flex; justify-content: center; align-items: flex-start; min-height: 50vh;")
+    .card(style="max-width: 400px; width: 100%; margin: 0 auto;")
+      .card-header(style="background-color: #8B4513 !important; color: white !important;")
+        h2.mb-0(style="color: white !important;")
+          i.fas.fa-edit.me-2
+          | Edit Product
+      .card-body
+        form(action=`/ecommerce/product/edit/${product._id}` method="POST" enctype="multipart/form-data")
+          .form-group.mb-3
+            label(for="name") Product Name
+            input#name.form-control(type="text" name="name" value=product.name required)
+
+          .form-group.mb-3
+            label(for="price") Price
+            input#price.form-control(type="number" name="price" value=product.price required)
+
+          .form-group.mb-3
+            label(for="image") Product Image
+            input#image.form-control(type="file" name="image" accept="image/*")
+
+          .d-grid
+            button.btn.btn-danger(type="submit") Update Product
